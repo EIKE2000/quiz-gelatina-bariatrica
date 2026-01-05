@@ -10,10 +10,10 @@
 // ------------------------------------------------------------------
 
 export const firebaseConfig = {
-    apiKey: "COLE_SUA_API_KEY_AQUI",
-    authDomain: "seu-projeto.firebaseapp.com",
-    projectId: "seu-projeto",
-    storageBucket: "seu-projeto.appspot.com",
-    messagingSenderId: "123456789",
-    appId: "1:123456789:web:abcdef"
+    apiKey: "AIzaSyBeIIA97vpnYIiaORABA6oDveHgNS3Oa-U",
+    authDomain: "quiz-gelatina-bariatrica.firebaseapp.com",
+    projectId: "quiz-gelatina-bariatrica",
+    storageBucket: "quiz-gelatina-bariatrica.firebasestorage.app",
+    messagingSenderId: "531053725080",
+    appId: "1:531053725080:web:fa69c69d4c68ef366a57ed"
 };
