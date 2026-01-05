@@ -1161,63 +1161,141 @@
 
         startScarcityCounter();
 
-        // SCRIPT DE CORREÇÃO VSL - SAFARI MOBILE COMPATIBLE
+        // VSL DELAY SCRIPT - DEBUG VERSION
         (function () {
             const DELAY_MINUTES = 15;
             const DELAY_SECONDS = DELAY_MINUTES * 60;
             const CTA_ID = "vsl-cta-container";
             const VIDEO_ID = "nbmhjq4ydl";
-            const STORAGE_KEY = "vsl_watched_full_v3";
+            const STORAGE_KEY = "vsl_watched_full_v4";
+
+            console.log("🎬 VSL Script: Iniciado. Delay configurado para", DELAY_MINUTES, "minutos (", DELAY_SECONDS, "segundos)");
 
             function showCTA() {
                 const cta = document.getElementById(CTA_ID);
                 if (cta && cta.classList.contains('hidden')) {
                     cta.classList.remove('hidden');
-                    try { localStorage.setItem(STORAGE_KEY, "true"); } catch (e) { }
-                    console.log("VSL: CTA Revelado com sucesso.");
+                    try {
+                        localStorage.setItem(STORAGE_KEY, "true");
+                        console.log("✅ VSL: CTA REVELADO COM SUCESSO!");
+                    } catch (e) {
+                        console.error("❌ Erro ao salvar no localStorage:", e);
+                    }
+                } else if (!cta) {
+                    console.error("❌ Elemento CTA não encontrado:", CTA_ID);
+                } else {
+                    console.log("ℹ️ CTA já está visível");
                 }
             }
 
-            // 1. Verificação de Persistência (Se já assistiu antes)
+            // 1. Verificação de Persistência
             try {
                 if (localStorage.getItem(STORAGE_KEY) === "true") {
+                    console.log("✅ Detectado: Vídeo já foi assistido anteriormente");
                     setTimeout(showCTA, 1000);
+                } else {
+                    console.log("ℹ️ Primeira visualização detectada");
                 }
-            } catch (e) { }
+            } catch (e) {
+                console.error("❌ Erro ao verificar localStorage:", e);
+            }
 
-            // 2. Integração Wistia (Método Oficial)
+            // 2. Integração Wistia (_wq)
             window._wq = window._wq || [];
             window._wq.push({
                 id: VIDEO_ID,
                 onReady: function (video) {
+                    console.log("✅ Wistia Player Ready (via _wq)");
+                    console.log("📍 Tempo atual do vídeo:", video.time(), "segundos");
+
                     video.bind("secondchange", function (s) {
-                        if (s >= DELAY_SECONDS) showCTA();
+                        if (s % 60 === 0) { // Log a cada minuto
+                            console.log("⏱️ Tempo decorrido:", Math.floor(s / 60), "min /", DELAY_MINUTES, "min");
+                        }
+                        if (s >= DELAY_SECONDS) {
+                            console.log("🎯 15 MINUTOS ALCANÇADOS! (secondchange)");
+                            showCTA();
+                        }
                     });
-                    if (video.time() >= DELAY_SECONDS) showCTA();
+
+                    if (video.time() >= DELAY_SECONDS) {
+                        console.log("🎯 Vídeo já passou dos 15 minutos (verificação inicial)");
+                        showCTA();
+                    }
                 }
             });
 
-            // 3. Polling de Segurança (Garante funcionamento no Safari Mobile)
+            // 3. Polling Robusto (Múltiplos Métodos)
+            let pollCount = 0;
             const pollingInterval = setInterval(function () {
+                pollCount++;
+
                 const cta = document.getElementById(CTA_ID);
                 if (!cta || !cta.classList.contains('hidden')) {
+                    if (pollCount === 1) console.log("⏹️ Polling interrompido: CTA já visível");
                     clearInterval(pollingInterval);
                     return;
                 }
 
                 let videoHandle = null;
+                let currentTime = 0;
+
                 try {
+                    // Método A: window.Wistia.api(id)
                     if (window.Wistia && window.Wistia.api) {
                         videoHandle = window.Wistia.api(VIDEO_ID);
+                        if (videoHandle) {
+                            currentTime = videoHandle.time();
+                            if (pollCount === 1) console.log("✅ Player encontrado via Wistia.api(id)");
+                        }
                     }
+
+                    // Método B: window.Wistia.api.first()
                     if (!videoHandle && window.Wistia && typeof window.Wistia.api.first === 'function') {
                         videoHandle = window.Wistia.api.first();
+                        if (videoHandle) {
+                            currentTime = videoHandle.time();
+                            if (pollCount === 1) console.log("✅ Player encontrado via Wistia.api.first()");
+                        }
                     }
-                    if (videoHandle && typeof videoHandle.time === 'function') {
-                        if (videoHandle.time() >= DELAY_SECONDS) showCTA();
+
+                    // Método C: Buscar no DOM diretamente
+                    if (!videoHandle) {
+                        const wistiaEmbed = document.querySelector('[id^="wistia_"]');
+                        if (wistiaEmbed && window.Wistia && window.Wistia.api) {
+                            const embedId = wistiaEmbed.id.replace('wistia_', '').split('_')[0];
+                            videoHandle = window.Wistia.api(embedId);
+                            if (videoHandle) {
+                                currentTime = videoHandle.time();
+                                if (pollCount === 1) console.log("✅ Player encontrado via DOM (embed ID:", embedId, ")");
+                            }
+                        }
                     }
-                } catch (e) { }
+
+                    if (videoHandle && currentTime >= DELAY_SECONDS) {
+                        console.log("🎯 15 MINUTOS ALCANÇADOS! (polling) - Tempo:", currentTime);
+                        showCTA();
+                    }
+                } catch (e) {
+                    if (pollCount === 1) console.error("❌ Erro no polling:", e);
+                }
             }, 2000);
+
+            // 4. ⚡ FAILSAFE ABSOLUTO - FORÇA O BOTÃO APARECER APÓS 15 MIN
+            // Este timer força a exibição independente dos outros métodos
+            const absoluteTimer = setTimeout(function () {
+                const cta = document.getElementById(CTA_ID);
+                if (cta && cta.classList.contains('hidden')) {
+                    console.log("⚡ FAILSAFE ATIVADO: Forçando CTA após 15 minutos (timer absoluto)");
+                    showCTA();
+                } else {
+                    console.log("✅ Timer absoluto: CTA já está visível (não precisa forçar)");
+                }
+            }, DELAY_SECONDS * 1000); // 15 minutos em milissegundos
+
+            // 5. Fallback de Emergência (Manual)
+            console.log("💡 Para testar manualmente, execute no console: document.getElementById('vsl-cta-container').classList.remove('hidden')");
+            console.log("⚡ FAILSAFE ABSOLUTO configurado: botón aparecerá AUTOMATICAMENTE en", DELAY_MINUTES, "minutos, mesmo que nada mais funcione");
         })();
     </script>
 
