@@ -1,0 +1,61 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================================================
+    // COLEÇÃO: funil_gelatina_eventos
+    // ========================================================================
+    // Tracking de eventos do quiz - permite leitura pública e escrita validada
+    // ========================================================================
+    match /funil_gelatina_eventos/{document} {
+      
+      // Permitir LEITURA para qualquer pessoa
+      // Motivo: Dashboard precisa ler os dados para exibir métricas
+      allow read: if true;
+      
+      // Permitir CRIAÇÃO apenas se os dados forem válidos
+      // Validações obrigatórias:
+      allow create: if 
+        // 1. Deve ter session_id (não nulo e não vazio)
+        request.resource.data.session_id is string &&
+        request.resource.data.session_id.size() > 0 &&
+        
+        // 2. Deve ter etapa_id válido (número entre 0 e 13)
+        request.resource.data.etapa_id is int &&
+        request.resource.data.etapa_id >= 0 &&
+        request.resource.data.etapa_id <= 13 &&
+        
+        // 3. Deve ter timestamp (não nulo)
+        request.resource.data.timestamp is string &&
+        request.resource.data.timestamp.size() > 0 &&
+        
+        // 4. Deve ter user_agent (não nulo e não vazio)
+        request.resource.data.user_agent is string &&
+        request.resource.data.user_agent.size() > 0;
+      
+      // BLOQUEAR UPDATE e DELETE
+      // Motivo: Eventos são imutáveis, não devem ser modificados após criação
+      allow update: if false;
+      allow delete: if false;
+    }
+    
+    // ========================================================================
+    // COLEÇÃO: _healthcheck (Opcional)
+    // ========================================================================
+    // Usado para testar conexão Firebase (pode ser removido em produção)
+    // ========================================================================
+    match /_healthcheck/{document} {
+      allow read, write: if true;
+    }
+    
+    // ========================================================================
+    // BLOQUEIO GERAL: Todas as outras coleções
+    // ========================================================================
+    // Qualquer coleção não explicitamente permitida acima será bloqueada
+    // Segurança máxima por padrão
+    // ========================================================================
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup - Integração Firebase + Tracking</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .step {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .question {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #4f46e5;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background 0.3s;
+        }
+
+        .option-btn:hover {
+            background: #4338ca;
+        }
+
+        .info {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            color: #4338ca;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- ========================================================================
+         PASSO 1: CARREGAR CDN DO FIREBASE
+         ======================================================================== -->
+    <!-- Firebase App (Core) - SEMPRE PRIMEIRO -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+
+    <!-- Firebase Firestore - DEPOIS DO CORE -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+    <!-- ========================================================================
+         PASSO 2: CARREGAR CONFIGURAÇÃO DO FIREBASE
+         ======================================================================== -->
+    <!-- Inicializa Firebase e cria window.db -->
+    <script src="firebase-config.js"></script>
+
+    <!-- ========================================================================
+         PASSO 3: CARREGAR SISTEMA DE TRACKING
+         ======================================================================== -->
+    <!-- Inicializa tracking automático e expõe window.trackStep() -->
+    <script src="tracking.js"></script>
+
+    <!-- ========================================================================
+         EXEMPLO DE QUIZ COM 3 STEPS
+         ======================================================================== -->
+
+    <div class="info">
+        ℹ️ Abra o Console (F12) para ver os eventos sendo enviados!
+    </div>
+
+    <!-- STEP 0: Primeira Pergunta -->
+    <div id="step-0" class="step active">
+        <div class="question">1. Qual é o seu principal objetivo?</div>
+        <button class="option-btn" onclick="handleStepClick(1)">Perder peso rapidamente</button>
+        <button class="option-btn" onclick="handleStepClick(1)">Melhorar saúde geral</button>
+        <button class="option-btn" onclick="handleStepClick(1)">Aumentar energia</button>
+        <button class="option-btn" onclick="handleStepClick(1)">Reduzir compulsão alimentar</button>
+    </div>
+
+    <!-- STEP 1: Segunda Pergunta -->
+    <div id="step-1" class="step">
+        <div class="question">2. Quantos quilos você precisa eliminar?</div>
+        <button class="option-btn" onclick="handleStepClick(2)">Até 5 kg</button>
+        <button class="option-btn" onclick="handleStepClick(2)">De 6 a 10 kg</button>
+        <button class="option-btn" onclick="handleStepClick(2)">De 11 a 15 kg</button>
+        <button class="option-btn" onclick="handleStepClick(2)">Mais de 15 kg</button>
+    </div>
+
+    <!-- STEP 2: Terceira Pergunta -->
+    <div id="step-2" class="step">
+        <div class="question">3. Qual é o seu maior desafio?</div>
+        <button class="option-btn" onclick="handleStepClick(3)">Falta de disciplina</button>
+        <button class="option-btn" onclick="handleStepClick(3)">Ansiedade e compulsão</button>
+        <button class="option-btn" onclick="handleStepClick(3)">Falta de tempo</button>
+        <button class="option-btn" onclick="handleStepClick(3)">Resultados lentos</button>
+    </div>
+
+    <!-- STEP 3: Mensagem Final -->
+    <div id="step-3" class="step">
+        <div class="question">✅ Quiz Completo!</div>
+        <div class="info">
+            <p><strong>Tracking Ativo:</strong></p>
+            <ul>
+                <li>4 eventos foram enviados para Firebase</li>
+                <li>Verifique o Console (F12) para ver os logs</li>
+                <li>Acesse o Firebase Console para ver os dados salvos</li>
+            </ul>
+        </div>
+        <button class="option-btn" onclick="location.reload()">🔄 Reiniciar Quiz</button>
+    </div>
+
+    <!-- ========================================================================
+         JAVASCRIPT DO QUIZ COM INTEGRAÇÃO DE TRACKING
+         ======================================================================== -->
+    <script>
+        //
+        // VARIÁVEL DE CONTROLE: Step atual
+        //
+        var currentStep = 0;
+
+        // ====================================================================
+        // FUNÇÃO: Manipular Clique em Opção
+        // ====================================================================
+        // Chamada quando o usuário clica em qualquer botão de opção
+        function handleStepClick(nextStep) {
+            console.log('🎯 Usuário clicou! Indo para Step:', nextStep);
+
+            // 1. Enviar evento de tracking ANTES de trocar
+            if (typeof window.trackStep === 'function') {
+                window.trackStep(currentStep);
+            } else {
+                console.warn('⚠️ trackStep() não está disponível');
+            }
+
+            // 2. Trocar para o próximo step
+            showStep(nextStep);
+        }
+
+        // ====================================================================
+        // FUNÇÃO: Mostrar Step
+        // ====================================================================
+        // Esconde o step atual e mostra o próximo
+        function showStep(stepNumber) {
+            // Esconder step atual
+            var currentStepEl = document.getElementById('step-' + currentStep);
+            if (currentStepEl) {
+                currentStepEl.classList.remove('active');
+            }
+
+            // Mostrar próximo step
+            var nextStepEl = document.getElementById('step-' + stepNumber);
+            if (nextStepEl) {
+                nextStepEl.classList.add('active');
+                currentStep = stepNumber;
+                console.log('📍 Step atual:', currentStep);
+            } else {
+                console.error('❌ Step não encontrado:', stepNumber);
+            }
+        }
+
+        // ====================================================================
+        // AUTO-TRACK DO STEP INICIAL (Step 0)
+        // ====================================================================
+        // Rastreia quando a página carrega (usuário chegou no Step 0)
+        window.addEventListener('load', function () {
+            console.log('🎬 Página carregada. Rastreando Step inicial...');
+
+            // Aguardar Firebase estar pronto
+            setTimeout(function () {
+                if (typeof window.trackStep === 'function') {
+                    window.trackStep(0);
+                } else {
+                    console.warn('⚠️ Tracking ainda não está pronto');
+                }
+            }, 1000);
+        });
+
+        // ====================================================================
+        // EXEMPLO DE USO MANUAL (OPCIONAL)
+        // ====================================================================
+        // Você pode chamar manualmente de qualquer lugar:
+        // window.trackStep(5); // Rastreia Step 5
+    </script>
+
+    <!-- ========================================================================
+         NOTAS DE IMPLEMENTAÇÃO
+         ======================================================================== 
+
+         📌 ORDEM DE CARREGAMENTO (IMPORTANTE):
+         1. Firebase Core CDN
+         2. Firebase Firestore CDN  
+         3. firebase-config.js (inicializa Firebase)
+         4. tracking.js (cria sistema de tracking)
+         5. Seu código do quiz
+
+         📌 COMO USAR NO SEU QUIZ REAL:
+         1. Copie os <script> tags para o seu index.html
+         2. Em cada botão de opção, adicione: onclick="handleStepClick(PRÓXIMO_STEP)"
+         3. Copie as funções handleStepClick() e showStep()
+         4. O tracking será automático!
+
+         📌 VERIFICAR SE ESTÁ FUNCIONANDO:
+         1. Abra o Console (F12)
+         2. Você deve ver: "✅ Firebase inicializado"
+         3. Você deve ver: "✅ Tracking inicializado"
+         4. Ao clicar, deve ver: "📡 TRACKING EVENT: {...}"
+         5. Deve ver: "✅ Evento salvo! ID: xxx"
+
+         ======================================================================== -->
+
+</body>
+
+</html>
