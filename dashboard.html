@@ -28,471 +28,229 @@
             padding: 20px;
         }
 
-        /* HEADER */
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 25px;
-            background: white;
-            padding: 20px 25px;
-            border-radius: 16px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
-        .header h1 {
-            font-size: 1.4rem;
-            font-weight: 700;
-            margin: 0;
-            color: #0f172a;
-        }
-
-        .header-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
-
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: #cbd5e1;
-        }
-
-        .status-live {
-            background: #10b981;
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-        }
-
-        /* GRID */
-        .grid {
+        .kpi-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
-        .col-2 {
-            grid-column: span 2;
-        }
-
-        .col-3 {
-            grid-column: span 3;
-        }
-
-        .col-4 {
-            grid-column: span 4;
-        }
-
-        @media (max-width: 1024px) {
-            .grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .col-3 {
-                grid-column: span 2;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .grid {
-                grid-template-columns: 1fr;
-            }
-
-            .col-2,
-            .col-3,
-            .col-4 {
-                grid-column: span 1;
-            }
-        }
-
-        /* CARDS */
-        .card {
+        .kpi-card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 24px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            border: 1px solid rgba(0, 0, 0, 0.02);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
+        .kpi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
         }
 
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
+        .chart-container {
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-bottom: 30px;
         }
 
-        /* METRICS */
-        .metric-big {
-            font-size: 2rem;
-            font-weight: 800;
-            color: #0f172a;
-            line-height: 1;
-        }
-
-        .metric-sub {
-            font-size: 0.85rem;
-            margin-top: 10px;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        /* TABLE */
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.85rem;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
         }
 
         th {
-            text-align: left;
-            padding: 12px;
+            background: #f1f5f9;
             color: var(--text-light);
-            border-bottom: 1px solid var(--border);
-            background: #f8fafc;
-        }
-
-        td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border);
-            font-weight: 500;
-        }
-
-        .step-tag {
-            background: #e0e7ff;
-            color: #4338ca;
-            padding: 3px 8px;
-            border-radius: 4px;
             font-weight: 600;
-            font-size: 0.75rem;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-online {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-error {
+            background: #fee2e2;
+            color: #991b1b;
         }
     </style>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-    <script src="firebase-config.js"></script>
-
 </head>
 
 <body>
 
     <div class="header">
         <div>
-            <h1>Antigravity Analytics (Real-Time)</h1>
-            <div class="header-status">
-                <div id="statusDot" class="status-dot"></div>
-                <span id="statusText">Conectando ao Firebase...</span>
-            </div>
+            <h1 style="margin:0">Antigravity Analytics</h1>
+            <p style="color:var(--text-light); margin:5px 0 0">Real-Time Funnel Tracking</p>
         </div>
-        <div>
-            <button onclick="window.location.reload()"
-                style="padding:8px 15px; background:#f1f5f9; border:none; border-radius:8px; cursor:pointer; font-weight:600; color:#475569;">Atualizar
-                Dados</button>
+        <div id="connection-status" class="status-badge status-error">Conectando...</div>
+    </div>
+
+    <div class="kpi-grid">
+        <div class="kpi-card">
+            <div style="color:var(--text-light); font-size:14px">Visitantes Únicos</div>
+            <div id="kpi-visitors" class="kpi-value">0</div>
+        </div>
+        <div class="kpi-card">
+            <div style="color:var(--text-light); font-size:14px">Taxa de Conversão</div>
+            <div id="kpi-conversion" class="kpi-value">0%</div>
+        </div>
+        <div class="kpi-card">
+            <div style="color:var(--text-light); font-size:14px">Tempo Médio</div>
+            <div id="kpi-avg-time" class="kpi-value">0s</div>
+        </div>
+        <div class="kpi-card">
+            <div style="color:var(--text-light); font-size:14px">Maior Abandono</div>
+            <div id="kpi-bottleneck" class="kpi-value">-</div>
         </div>
     </div>
 
-    <!-- METRICS -->
-    <div class="grid">
-        <div class="card">
-            <div class="card-title">Total Visitantes (Reais)</div>
-            <div class="metric-big" id="kpi-visitors">-</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Taxa de Conversão VSL</div>
-            <div class="metric-big" id="kpi-conversion">-</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Tempo Médio Total</div>
-            <div class="metric-big" id="kpi-avg-time">-</div>
-        </div>
-        <div class="card">
-            <div class="card-title">Ponto de Maior Abandono</div>
-            <div class="metric-big" id="kpi-bottleneck" style="font-size:1.4rem; color:#ef4444">-</div>
-        </div>
+    <div class="chart-container">
+        <h3 style="margin-top:0">Fluxo do Funil</h3>
+        <canvas id="funnelChart" height="300"></canvas>
     </div>
 
-    <!-- CHARTS -->
-    <div class="grid">
-        <div class="card col-3">
-            <div class="card-header">
-                <div class="card-title">Funil de Retenção</div>
-            </div>
-            <div style="height: 300px; width: 100%;">
-                <canvas id="funnelChart"></canvas>
-            </div>
-        </div>
-        <div class="card col-1">
-            <div class="card-header">
-                <div class="card-title">Dispositivos</div>
-            </div>
-            <div style="height: 200px; width: 100%; position:relative;">
-                <canvas id="deviceChart"></canvas>
-            </div>
-            <div style="margin-top:20px; font-size:0.85rem; color:#64748b;">
-                Dados filtrados (apenas usuários reais, sem previews de editor).
-            </div>
-        </div>
-    </div>
-
-    <!-- TABLE -->
-    <div class="card col-4">
-        <div class="card-header">
-            <div class="card-title">Detalhamento por Etapa</div>
-        </div>
+    <div class="chart-container">
+        <h3>Últimos Eventos</h3>
         <table>
             <thead>
                 <tr>
+                    <th>Sessão</th>
                     <th>Etapa</th>
-                    <th>Visitantes</th>
-                    <th>Retenção</th>
-                    <th>Tempo Médio</th>
-                    <th>Status</th>
+                    <th>Dispositivo</th>
+                    <th>Data/Hora</th>
                 </tr>
             </thead>
             <tbody id="tableBody">
                 <tr>
-                    <td colspan="5" style="text-align:center; padding:30px;">Carregando dados...</td>
+                    <td colspan="4" style="text-align:center">Carregando dados...</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 
-        // TODO: REPLACE WITH YOUR FIREBASE CONFIG
-        // Configuração Dinâmica (Tenta config.js, senão usa placeholder)
-        let firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
+    <script>
+        // Configuração Manual (Baseada no seu config.js)
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeIIA97vpnYIiaORABA6oDveHgNS3Oa-U",
+            authDomain: "quiz-gelatina-bariatrica.firebaseapp.com",
+            projectId: "quiz-gelatina-bariatrica",
+            storageBucket: "quiz-gelatina-bariatrica.firebasestorage.app",
+            messagingSenderId: "531053725080",
+            appId: "1:531053725080:web:fa69c69d4c68ef366a57ed"
         };
 
+        // Inicializar Firebase
         try {
-            const module = await import('./config.js');
-            if (module.firebaseConfig && module.firebaseConfig.apiKey !== "COLE_SUA_API_KEY_AQUI") {
-                firebaseConfig = module.firebaseConfig;
-            }
-        } catch (e) {
-            console.log("Modo Standalone (Dashboard): Configure config.js para dados reais.");
+            firebase.initializeApp(firebaseConfig);
+            const db = firebase.firestore();
+            document.getElementById('connection-status').innerText = "Conectado (Real-Time)";
+            document.getElementById('connection-status').className = "status-badge status-online";
+
+            // Iniciar Escuta de Dados
+            loadData(db);
+        } catch (error) {
+            console.error("Erro Firebase:", error);
+            document.getElementById('connection-status').innerText = "Erro de Conexão";
         }
 
-        let db = null;
-        try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            document.getElementById('statusDot').classList.add('status-live');
-            document.getElementById('statusText').innerText = "Conectado (Ao Vivo)";
-            loadRealData();
-        } catch (e) {
-            console.error(e);
-            document.getElementById('statusText').innerText = "Erro: Configuração (Usando Demo)";
-            renderMockFallback();
-        }
-
-        async function loadRealData() {
-            try {
-                // Fetch ALL events (consider composite index for scale)
-                const q = query(collection(db, "funil_gelatina_eventos"), orderBy("timestamp_entrada", "desc"));
-                const snapshot = await getDocs(q);
-
-                if (snapshot.empty) {
-                    renderEmptyState();
-                    return;
-                }
-
-                const events = [];
-                snapshot.forEach(doc => events.push(doc.data()));
-
-                processEvents(events);
-
-            } catch (err) {
-                console.error("Error fetching data:", err);
-                document.getElementById('statusText').innerText = "Erro: Configuração Pendente";
-                renderMockFallback();
-            }
-        }
-
-        function processEvents(allEvents) {
-            // Filter Real Users
-            const realEvents = allEvents.filter(e => !e.is_test);
-
-            // Group by Session for Metrics and Time Calc
-            const sessions = {};
-            realEvents.forEach(e => {
-                if (!sessions[e.session_id]) sessions[e.session_id] = { maxStep: -1, devices: new Set(), steps: [] };
-
-                const stepId = parseInt(e.etapa_id || 0);
-                if (stepId > sessions[e.session_id].maxStep) {
-                    sessions[e.session_id].maxStep = stepId;
-                }
-                sessions[e.session_id].devices.add(e.dispositivo || 'unknown');
-
-                // Store step info for time calc
-                sessions[e.session_id].steps.push({
-                    id: stepId,
-                    time: e.timestamp_entrada ? e.timestamp_entrada.seconds : 0
+        function loadData(db) {
+            db.collection('funil_gelatina_eventos')
+                .orderBy('timestamp', 'desc')
+                .limit(100)
+                .onSnapshot(snapshot => {
+                    const events = [];
+                    snapshot.forEach(doc => events.push(doc.data()));
+                    renderDashboard(events);
                 });
+        }
+
+        function renderDashboard(events) {
+            if (events.length === 0) {
+                document.getElementById('tableBody').innerHTML = '<tr><td colspan="4" style="text-align:center">Nenhum dado encontrado ainda.</td></tr>';
+                return;
+            }
+
+            // Atualizar Tabela
+            const html = events.slice(0, 10).map(e => `
+                <tr>
+                    <td><code>${e.session_id.substring(0, 12)}...</code></td>
+                    <td>Etapa ${e.etapa_id}</td>
+                    <td>${e.dispositivo || 'unknown'}</td>
+                    <td>${new Date(e.timestamp).toLocaleString()}</td>
+                </tr>
+            `).join('');
+            document.getElementById('tableBody').innerHTML = html;
+
+            // Processar Dados para o Gráfico
+            const steps = {};
+            events.forEach(e => {
+                steps[e.etapa_id] = (steps[e.etapa_id] || 0) + 1;
             });
 
-            // Calculate Metrics
-            const stepCounts = new Array(15).fill(0);
-            let totalVisitors = 0;
-            let mobile = 0, desktop = 0;
-
-            // Time Calc Arrays
-            const timeSums = new Array(15).fill(0);
-            const timeCounts = new Array(15).fill(0);
-
-            Object.values(sessions).forEach(sess => {
-                totalVisitors++;
-                for (let i = 0; i <= sess.maxStep && i < 15; i++) {
-                    stepCounts[i]++;
-                }
-                if (sess.devices.has('mobile')) mobile++; else desktop++;
-
-                // Time calc: sort steps by ID
-                if (sess.steps.length > 1) {
-                    sess.steps.sort((a, b) => a.id - b.id);
-                    for (let k = 0; k < sess.steps.length - 1; k++) {
-                        const curr = sess.steps[k];
-                        const next = sess.steps[k + 1];
-                        if (next.id === curr.id + 1 && next.time > curr.time) {
-                            const diff = next.time - curr.time;
-                            if (diff < 600) { // Filter unrealistic times (>10min per step)
-                                timeSums[curr.id] += diff;
-                                timeCounts[curr.id]++;
-                            }
-                        }
-                    }
-                }
-            });
-
-            if (totalVisitors === 0) { renderEmptyState(); return; }
-
-            // Render Metrics
-            document.getElementById('kpi-visitors').innerText = totalVisitors.toLocaleString();
-
-            const conversion = ((stepCounts[14] / stepCounts[0]) * 100).toFixed(1) + '%';
-            document.getElementById('kpi-conversion').innerText = conversion;
-
-            // Total avg time (sum of avgs)
-            let totalTime = 0;
-            const avgTimes = stepCounts.map((val, i) => {
-                const avg = timeCounts[i] > 0 ? Math.round(timeSums[i] / timeCounts[i]) : 0;
-                totalTime += avg;
-                return avg;
-            });
-            document.getElementById('kpi-avg-time').innerText = `${Math.floor(totalTime / 60)}m ${totalTime % 60}s`;
-
-            // Data for Render
-            const stepsData = stepCounts.map((count, idx) => ({
-                id: idx,
-                name: `Step ${idx}`,
-                users: count,
-                avgTime: avgTimes[idx]
+            const chartData = Object.keys(steps).sort((a, b) => a - b).map(s => ({
+                step: "Etapa " + s,
+                count: steps[s]
             }));
 
-            // Find bottlenecks
-            let maxDropVal = 0;
-            let bottleneckName = "-";
-            for (let i = 0; i < 14; i++) {
-                const drop = stepCounts[i] - stepCounts[i + 1];
-                if (drop > maxDropVal && stepCounts[i] > 0) {
-                    maxDropVal = drop;
-                    bottleneckName = `Step ${i}`;
-                }
-            }
-            document.getElementById('kpi-bottleneck').innerText = bottleneckName;
+            updateChart(chartData);
 
-            renderDashboard(stepsData, mobile, desktop);
+            // Atualizar KPIs
+            document.getElementById('kpi-visitors').innerText = new Set(events.map(e => e.session_id)).size;
         }
 
-        function renderDashboard(data, mobile, desktop) {
-            // Table
-            const tbody = document.getElementById('tableBody');
-            tbody.innerHTML = '';
+        let myChart = null;
+        function updateChart(data) {
+            const ctx = document.getElementById('funnelChart').getContext('2d');
+            if (myChart) myChart.destroy();
 
-            data.forEach((step, idx) => {
-                const nextUserCount = data[idx + 1] ? data[idx + 1].users : 0;
-                const retention = step.users > 0 ? ((nextUserCount / step.users) * 100).toFixed(1) + '%' : '0%';
-                if (idx === 14) retention = '100%';
-
-                const timeStr = step.avgTime > 0 ? `${step.avgTime}s` : '-';
-                const status = (Number(retention.replace('%', '')) < 70 && idx < 14) ? '🔴 Gargalo' : '🟢 OK';
-
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><span class="step-tag">Step ${step.id}</span></td>
-                    <td style="font-weight:700">${step.users}</td>
-                    <td style="color:#10b981">${retention}</td>
-                    <td>${timeStr}</td>
-                    <td>${status}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-
-            // Funnel Chart
-            new Chart(document.getElementById('funnelChart'), {
+            myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: data.map(d => d.name),
+                    labels: data.map(d => d.step),
                     datasets: [{
-                        label: 'Visitantes Únicos',
-                        data: data.map(d => d.users),
+                        label: 'Visitantes',
+                        data: data.map(d => d.count),
                         backgroundColor: '#4f46e5'
                     }]
                 },
-                options: { indexAxis: 'y', responsive: true, maintainAspectRatio: false }
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
             });
-
-            // Device Chart
-            new Chart(document.getElementById('deviceChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: ['Mobile', 'Desktop'],
-                    datasets: [{
-                        data: [mobile, desktop],
-                        backgroundColor: ['#3b82f6', '#94a3b8']
-                    }]
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        function renderMockFallback() {
-            // Demo for when config is missing
-            const mockCounts = [200, 180, 160, 150, 120, 110, 100, 95, 90, 85, 80, 75, 60, 50, 40];
-            const mockTimes = [15, 8, 5, 12, 6, 8, 7, 9, 20, 5, 5, 5, 30, 10, 600];
-            const data = mockCounts.map((c, i) => ({ id: i, name: `Step ${i}`, users: c, avgTime: mockTimes[i] }));
-
-            document.getElementById('kpi-visitors').innerText = "200 (Demo)";
-            document.getElementById('kpi-conversion').innerText = "20% (Demo)";
-            document.getElementById('kpi-avg-time').innerText = "3m 45s (Demo)";
-            document.getElementById('kpi-bottleneck').innerText = "Step 4 (Demo)";
-            renderDashboard(data, 150, 50);
-        }
-
-        function renderEmptyState() {
-            document.getElementById('tableBody').innerHTML = '<tr><td colspan="5" style="text-align:center; padding:20px;">Nenhum dado real encontrado. Usuários reais ainda não acessaram o funil.</td></tr>';
         }
     </script>
 </body>
