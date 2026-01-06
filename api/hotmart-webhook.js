@@ -8,15 +8,30 @@ const admin = require('firebase-admin');
 // Inicializar Firebase Admin
 if (!admin.apps.length) {
     try {
-        admin.initializeApp({
-            credential: admin.credential.cert({
+        let credential;
+
+        // Método 1: Usando variável JSON completa (FIREBASE_SERVICE_ACCOUNT)
+        if (process.env.FIREBASE_SERVICE_ACCOUNT) {
+            const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+            credential = admin.credential.cert(serviceAccount);
+        }
+        // Método 2: Usando variáveis separadas
+        else if (process.env.FIREBASE_PROJECT_ID && process.env.FIREBASE_CLIENT_EMAIL && process.env.FIREBASE_PRIVATE_KEY) {
+            credential = admin.credential.cert({
                 projectId: process.env.FIREBASE_PROJECT_ID,
                 clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-                privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')
-            })
-        });
+                privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+            });
+        }
+        else {
+            throw new Error('Firebase credentials not configured. Add FIREBASE_SERVICE_ACCOUNT or individual vars.');
+        }
+
+        admin.initializeApp({ credential });
+        console.log('✅ Firebase Admin initialized');
     } catch (error) {
-        console.error('Error initializing Firebase Admin:', error);
+        console.error('❌ Error initializing Firebase Admin:', error);
+        throw error;
     }
 }
 
