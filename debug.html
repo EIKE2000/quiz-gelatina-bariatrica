@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Webhook Hotmart</title>
+    <style>
+        body {
+            font-family: monospace;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+        }
+
+        .card {
+            background: #252526;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #3e3e42;
+        }
+
+        h2 {
+            color: #4ec9b0;
+            margin-top: 0;
+        }
+
+        .status-ok {
+            color: #4ec9b0;
+        }
+
+        .status-error {
+            color: #f48771;
+        }
+
+        .log-entry {
+            padding: 10px;
+            margin: 5px 0;
+            background: #1e1e1e;
+            border-left: 3px solid #4ec9b0;
+            font-size: 14px;
+        }
+
+        pre {
+            background: #1e1e1e;
+            padding: 15px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        button {
+            background: #0e639c;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #1177bb;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Debug - Sistema de Conversão</h1>
+
+    <div class="card">
+        <h2>📊 Coleções Firebase</h2>
+        <button onclick="checkLeads()">Verificar Leads</button>
+        <button onclick="checkConversions()">Verificar Conversões</button>
+        <button onclick="checkEvents()">Verificar Eventos do Quiz</button>
+        <div id="firebase-status"></div>
+    </div>
+
+    <div class="card">
+        <h2>📬 Últimos Leads (quiz_leads)</h2>
+        <div id="leads-list">Carregando...</div>
+    </div>
+
+    <div class="card">
+        <h2>💰 Últimas Conversões (conversoes)</h2>
+        <div id="conversions-list">Carregando...</div>
+    </div>
+
+    <div class="card">
+        <h2>🧪 Testar Webhook Manualmente</h2>
+        <p>Use isto para simular uma venda:</p>
+        <label>Email do Lead:</label>
+        <input type="email" id="test-email" placeholder="usuario@email.com" style="width:300px; padding:8px;">
+        <br><br>
+        <button onclick="testWebhook()">Enviar Teste de Venda</button>
+        <div id="webhook-test-result"></div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        // Configuração Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeIIA97vpnYIiaORABA6oDveHgNS3Oa-U",
+            authDomain: "quiz-gelatina-bariatrica.firebaseapp.com",
+            projectId: "quiz-gelatina-bariatrica",
+            storageBucket: "quiz-gelatina-bariatrica.firebasestorage.app",
+            messagingSenderId: "531053725080",
+            appId: "1:531053725080:web:fa69c69d4c68ef366a57ed"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Auto-load ao carregar
+        window.addEventListener('load', () => {
+            checkLeads();
+            checkConversions();
+        });
+
+        async function checkLeads() {
+            const container = document.getElementById('leads-list');
+            container.innerHTML = '<p>🔄 Carregando leads...</p>';
+
+            try {
+                const snapshot = await db.collection('quiz_leads')
+                    .orderBy('timestamp', 'desc')
+                    .limit(10)
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="status-error">❌ Nenhum lead encontrado</p><p>Isso significa que ninguém preencheu o formulário do Step 12 ainda.</p>';
+                    return;
+                }
+
+                let html = `<p class="status-ok">✅ ${snapshot.size} leads encontrados</p>`;
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const timestamp = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('pt-BR') : 'N/A';
+                    const converted = data.converted ? '✅ CONVERTIDO' : '⏳ Aguardando';
+
+                    html += `
+                        <div class="log-entry">
+                            <strong>${data.email}</strong> | ${data.name || 'Sem nome'}<br>
+                            Session: <code>${data.session_id}</code><br>
+                            Data: ${timestamp} | Status: ${converted}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<p class="status-error">❌ Erro: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+
+        async function checkConversions() {
+            const container = document.getElementById('conversions-list');
+            container.innerHTML = '<p>🔄 Carregando conversões...</p>';
+
+            try {
+                const snapshot = await db.collection('conversoes')
+                    .orderBy('timestamp', 'desc')
+                    .limit(10)
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<p class="status-error">❌ Nenhuma conversão encontrada</p><p><strong>Possíveis causas:</strong></p><ul><li>Webhook do Hotmart não configurado</li><li>API não está funcionando (faltam variáveis de ambiente)</li><li>Email do teste diferente do lead cadastrado</li></ul>';
+                    return;
+                }
+
+                let html = `<p class="status-ok">✅ ${snapshot.size} conversões encontradas</p>`;
+
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    const timestamp = data.timestamp ? new Date(data.timestamp.toDate()).toLocaleString('pt-BR') : 'N/A';
+
+                    html += `
+                        <div class="log-entry" style="border-left-color: #4ec9b0;">
+                            <strong>💰 ${data.email}</strong> | ${data.name || 'N/A'}<br>
+                            Valor: ${data.currency || ''} ${data.value || 0}<br>
+                            Transaction: <code>${data.transaction_id}</code><br>
+                            Session: <code>${data.session_id || 'não encontrado'}</code><br>
+                            Data: ${timestamp}
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+            } catch (error) {
+                container.innerHTML = `<p class="status-error">❌ Erro: ${error.message}</p>`;
+                console.error(error);
+            }
+        }
+
+        async function checkEvents() {
+            alert('Verificando eventos do quiz...');
+            const snapshot = await db.collection('funil_gelatina_eventos').limit(5).get();
+            console.log(`Total de eventos: ${snapshot.size}`);
+            alert(`Total de eventos do quiz: ${snapshot.size}`);
+        }
+
+        async function testWebhook() {
+            const email = document.getElementById('test-email').value;
+            const resultDiv = document.getElementById('webhook-test-result');
+
+            if (!email) {
+                alert('Digite um email!');
+                return;
+            }
+
+            resultDiv.innerHTML = '<p>🔄 Enviando teste...</p>';
+
+            const testData = {
+                event: "PURCHASE_APPROVED",
+                data: {
+                    buyer: {
+                        email: email,
+                        name: "Teste Manual"
+                    },
+                    purchase: {
+                        product: {
+                            name: "Gelatina Bariátrica"
+                        },
+                        price: {
+                            value: 97.00,
+                            currency_code: "BRL"
+                        }
+                    },
+                    transaction: "TEST_" + Date.now()
+                }
+            };
+
+            try {
+                const response = await fetch('/api/hotmart-webhook', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(testData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    resultDiv.innerHTML = `
+                        <p class="status-ok">✅ Webhook processado com sucesso!</p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                        <p>Atualize a lista de conversões para ver o resultado.</p>
+                    `;
+                    setTimeout(checkConversions, 2000);
+                } else {
+                    resultDiv.innerHTML = `
+                        <p class="status-error">❌ Erro no webhook</p>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="status-error">❌ Erro: ${error.message}</p>`;
+            }
+        }
+    </script>
+</body>
+
+</html>
