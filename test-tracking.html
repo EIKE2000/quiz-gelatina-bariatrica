@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test - Firebase Tracking</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .status {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .status h2 {
+            margin-top: 0;
+            color: #333;
+        }
+
+        .log {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .log div {
+            margin-bottom: 5px;
+        }
+
+        .success {
+            color: #0f0;
+        }
+
+        .error {
+            color: #f00;
+        }
+
+        .info {
+            color: #0ff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="status">
+        <h2>🧪 Teste de Integração Firebase + Tracking</h2>
+        <p><strong>Versão:</strong> <span id="version">v2.0 (
+                <?php echo date('Y-m-d H:i:s'); ?>)
+            </span></p>
+        <p><strong>Status Firebase:</strong> <span id="firebase-status">Carregando...</span></p>
+        <p><strong>Status Tracking:</strong> <span id="tracking-status">Carregando...</span></p>
+        <p><strong>Session ID:</strong> <span id="session-id">-</span></p>
+    </div>
+
+    <div class="status">
+        <h2>📋 Console Logs</h2>
+        <div class="log" id="console-output"></div>
+    </div>
+
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Sistema de Tracking -->
+    <script src="tracking.js"></script>
+
+    <!-- Interface de Teste -->
+    <script>
+        const consoleOutput = document.getElementById('console-output');
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+
+        function addLog(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = new Date().toLocaleTimeString() + ' | ' + message;
+            consoleOutput.appendChild(div);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        console.log = function (...args) {
+            originalLog.apply(console, args);
+            addLog(args.join(' '), 'success');
+        };
+
+        console.error = function (...args) {
+            originalError.apply(console, args);
+            addLog(args.join(' '), 'error');
+        };
+
+        console.warn = function (...args) {
+            originalWarn.apply(console, args);
+            addLog(args.join(' '), 'info');
+        };
+
+        // Verificar status a cada 500ms
+        const checkInterval = setInterval(function () {
+            // Firebase
+            if (typeof window.db !== 'undefined' && window.db !== null) {
+                document.getElementById('firebase-status').textContent = '✅ Conectado';
+                document.getElementById('firebase-status').style.color = 'green';
+            }
+
+            // Tracking
+            if (typeof window.trackStep === 'function') {
+                document.getElementById('tracking-status').textContent = '✅ Pronto';
+                document.getElementById('tracking-status').style.color = 'green';
+
+                const sessionId = localStorage.getItem('funnel_session_id');
+                if (sessionId) {
+                    document.getElementById('session-id').textContent = sessionId;
+                }
+
+                clearInterval(checkInterval);
+            }
+        }, 500);
+
+        // Teste automático após 3 segundos
+        setTimeout(function () {
+            if (typeof window.trackStep === 'function') {
+                addLog('🧪 Enviando evento de teste...', 'info');
+                window.trackStep(0);
+            } else {
+                addLog('❌ tracking.js não foi carregado!', 'error');
+            }
+        }, 3000);
+
+        // Versão timestamp
+        document.getElementById('version').textContent = 'v2.0 (' + new Date().toLocaleString() + ')';
+    </script>
+</body>
+
+</html>
