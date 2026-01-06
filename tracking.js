@@ -1,7 +1,8 @@
 // ============================================================================
-// SISTEMA DE TRACKING - Quiz Gelatina Bariátrica (CORRIGIDO PARA FIREBASE 8.x)
+// SISTEMA DE TRACKING - Quiz Gelatina Bariátrica (VERSÃO FINAL COM DELAY)
 // ============================================================================
 // Rastreia eventos de navegação do usuário e envia para Firebase Firestore
+// Aguarda Firebase estar totalmente inicializado antes de usar
 // ============================================================================
 
 (function () {
@@ -9,6 +10,29 @@
 
     // Variáveis globais
     var sessionId = null;
+    var firebaseReady = false;
+    var maxRetries = 50; // 5 segundos (50 x 100ms)
+    var retryCount = 0;
+
+    // ========================================================================
+    // FUNÇÃO: Aguardar Firebase estar pronto
+    // ========================================================================
+    function waitForFirebase() {
+        if (typeof window.db !== 'undefined' && window.db !== null) {
+            firebaseReady = true;
+            console.log('✅ Firebase pronto para tracking');
+            initTracking();
+            return;
+        }
+
+        retryCount++;
+        if (retryCount < maxRetries) {
+            setTimeout(waitForFirebase, 100);
+        } else {
+            console.warn('⚠️ Firebase não ficou pronto após 5 segundos');
+            initTracking(); // Inicializar mesmo sem Firebase
+        }
+    }
 
     // ========================================================================
     // FUNÇÃO: Inicializar Tracking
@@ -24,17 +48,9 @@
             localStorage.setItem('funnel_session_id', sessionId);
         }
 
-        // Verificar se Firebase está pronto
-        if (typeof window.db !== 'undefined' && window.db !== null) {
-            console.log('✅ Tracking inicializado');
-            console.log('📍 Session ID:', sessionId);
-            console.log('📍 Firebase: Conectado');
-        } else {
-            console.warn('⚠️ Tracking inicializado (Firebase offline)');
-            console.log('📍 Session ID:', sessionId);
-        }
-
-        return sessionId;
+        console.log('✅ Tracking inicializado');
+        console.log('📍 Session ID:', sessionId);
+        console.log('📍 Firebase Ready:', firebaseReady);
     }
 
     // ========================================================================
@@ -86,8 +102,10 @@
     // ========================================================================
     function sendEventToFirebase(event) {
         // Verificar se Firebase está disponível
-        if (typeof window.db === 'undefined' || window.db === null) {
+        if (!firebaseReady || typeof window.db === 'undefined' || window.db === null) {
             console.warn('⚠️ Firebase offline: evento não salvo');
+            console.warn('firebaseReady:', firebaseReady);
+            console.warn('window.db:', typeof window.db);
             return;
         }
 
@@ -95,14 +113,19 @@
         event.server_timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
         // Enviar para Firestore usando Firebase 8.x Compat SDK
-        window.db.collection('funil_gelatina_eventos')
-            .add(event)
-            .then(function (docRef) {
-                console.log('✅ Evento salvo! ID:', docRef.id);
-            })
-            .catch(function (error) {
-                console.error('❌ Erro ao salvar:', error.message);
-            });
+        try {
+            window.db.collection('funil_gelatina_eventos')
+                .add(event)
+                .then(function (docRef) {
+                    console.log('✅ Evento salvo! ID:', docRef.id);
+                })
+                .catch(function (error) {
+                    console.error('❌ Erro ao salvar:', error.message);
+                    console.error('Código de erro:', error.code);
+                });
+        } catch (e) {
+            console.error('❌ Erro ao enviar evento:', e.message);
+        }
     }
 
     // ========================================================================
@@ -113,14 +136,15 @@
     window.trackFirebaseStep = trackStep; // Alias para compatibilidade
     window.sendEventToFirebase = sendEventToFirebase;
     window.getDeviceType = getDeviceType;
+    window.waitForFirebase = waitForFirebase;
 
     // ========================================================================
-    // AUTO-INICIALIZAÇÃO
+    // AUTO-INICIALIZAÇÃO - Aguardar Firebase estar pronto
     // ========================================================================
     if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', initTracking);
+        document.addEventListener('DOMContentLoaded', waitForFirebase);
     } else {
-        initTracking();
+        waitForFirebase();
     }
 
 })();
