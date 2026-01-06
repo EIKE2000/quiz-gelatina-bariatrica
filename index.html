@@ -898,19 +898,35 @@
             <div id="step-12" class="screen card hidden">
                 <h3 class="question-text">Análisis Metabólico</h3>
                 <p class="question-sub">Estos datos son necesarios para calcular tu Índice de Respuesta Metabólica
-                    (IRM).</p>
+                    (IRM) y enviarte tu plan personalizado.</p>
                 <div style="text-align:left; margin-bottom:20px;">
-                    <label style="display:block; margin:10px 0 5px;">Peso (kg)</label>
-                    <input type="number" style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd;"
+                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Nombre Completo *</label>
+                    <input id="input-name" type="text"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
+                        placeholder="Ej: María González" required>
+
+                    <label style="display:block; margin:20px 0 5px; font-weight:600;">Email *</label>
+                    <input id="input-email" type="email"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
+                        placeholder="tu@email.com" required>
+
+                    <label style="display:block; margin:20px 0 5px; font-weight:600;">Peso (kg)</label>
+                    <input id="input-weight" type="number"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
                         placeholder="Ej: 70">
-                    <label style="display:block; margin:10px 0 5px;">Altura (cm)</label>
-                    <input type="number" style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd;"
+
+                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Altura (cm)</label>
+                    <input id="input-height" type="number"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
                         placeholder="Ej: 165">
-                    <label style="display:block; margin:10px 0 5px;">Edad</label>
-                    <input type="number" style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd;"
+
+                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Edad</label>
+                    <input id="input-age" type="number"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
                         placeholder="Ej: 35">
                 </div>
-                <button class="cta-btn-premium" onclick="nextStep(13)">CALCULAR PERFIL</button>
+                <button class="cta-btn-premium" onclick="submitFormAndProceed()">CALCULAR PERFIL</button>
+                <p id="form-error" style="color:#ef4444; margin-top:10px; display:none; font-size:14px;"></p>
             </div>
 
             <!-- STEP 13 -->
@@ -1151,6 +1167,84 @@
             setTimeout(() => {
                 nextStep(14);
             }, 7000);
+        }
+
+        // ====================================================================
+        // FUNÇÃO: Salvar Lead e Prosseguir
+        // ====================================================================
+        async function submitFormAndProceed() {
+            const nameInput = document.getElementById('input-name');
+            const emailInput = document.getElementById('input-email');
+            const ageInput = document.getElementById('input-age');
+            const errorEl = document.getElementById('form-error');
+
+            // Validação
+            if (!nameInput.value.trim()) {
+                errorEl.textContent = '⚠️ Por favor, ingresa tu nombre';
+                errorEl.style.display = 'block';
+                nameInput.focus();
+                return;
+            }
+
+            if (!emailInput.value.trim()) {
+                errorEl.textContent = '⚠️ Por favor, ingresa tu email';
+                errorEl.style.display = 'block';
+                emailInput.focus();
+                return;
+            }
+
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                errorEl.textContent = '⚠️ Email inválido. Usa el formato: tu@email.com';
+                errorEl.style.display = 'block';
+                emailInput.focus();
+                return;
+            }
+
+            errorEl.style.display = 'none';
+
+            // Desabilitar botão durante envio
+            const submitBtn = event.target;
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'ENVIANDO...';
+
+            try {
+                // Obter session_id
+                const sessionId = localStorage.getItem('funnel_session_id');
+
+                // Preparar dados
+                const leadData = {
+                    session_id: sessionId,
+                    name: nameInput.value.trim(),
+                    email: emailInput.value.trim().toLowerCase(),
+                    age: ageInput.value ? parseInt(ageInput.value) : null
+                };
+
+                // Enviar para API
+                const response = await fetch('/api/save-lead', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(leadData)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Lead salvo com sucesso');
+                    // Prosseguir para próximo step
+                    nextStep(13);
+                } else {
+                    throw new Error('Erro ao salvar lead');
+                }
+
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                errorEl.textContent = '⚠️ Error al enviar. Verifica tu conexión e intenta nuevamente.';
+                errorEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'CALCULAR PERFIL';
+            }
         }
 
         function startScarcityCounter() {

@@ -1,0 +1,12 @@
+{
+    "name": "quiz-gelatina-bariatrica",
+    "version": "1.0.0",
+    "description": "Quiz com tracking Firebase e integracao Hotmart",
+    "private": true,
+    "dependencies": {
+        "firebase-admin": "^12.0.0"
+    },
+    "engines": {
+        "node": ">=18.x"
+    }
+}
