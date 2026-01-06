@@ -188,13 +188,24 @@
 
         function loadData(db) {
             db.collection('funil_gelatina_eventos')
-                .orderBy('timestamp', 'desc')
                 .limit(100)
-                .onSnapshot(snapshot => {
-                    const events = [];
-                    snapshot.forEach(doc => events.push(doc.data()));
-                    renderDashboard(events);
-                });
+                .onSnapshot(
+                    snapshot => {
+                        console.log('📊 Eventos recebidos:', snapshot.size);
+                        const events = [];
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            events.push(data);
+                            console.log('Evento:', data);
+                        });
+                        renderDashboard(events);
+                    },
+                    error => {
+                        console.error('❌ Erro ao carregar dados:', error);
+                        document.getElementById('connection-status').innerText = "Erro ao carregar dados";
+                        document.getElementById('connection-status').className = "status-badge status-error";
+                    }
+                );
         }
 
         function renderDashboard(events) {
