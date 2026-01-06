@@ -1,5 +1,5 @@
 // ============================================================================
-// SISTEMA DE TRACKING - Quiz Gelatina Bariátrica
+// SISTEMA DE TRACKING - Quiz Gelatina Bariátrica (CORRIGIDO PARA FIREBASE 8.x)
 // ============================================================================
 // Rastreia eventos de navegação do usuário e envia para Firebase Firestore
 // ============================================================================
@@ -82,7 +82,7 @@
     }
 
     // ========================================================================
-    // FUNÇÃO: Enviar Evento para Firebase
+    // FUNÇÃO: Enviar Evento para Firebase (FIREBASE 8.x COMPAT)
     // ========================================================================
     function sendEventToFirebase(event) {
         // Verificar se Firebase está disponível
@@ -91,10 +91,10 @@
             return;
         }
 
-        // Adicionar timestamp do servidor
+        // Adicionar timestamp do servidor (Firebase 8.x Compat)
         event.server_timestamp = firebase.firestore.FieldValue.serverTimestamp();
 
-        // Enviar para Firestore
+        // Enviar para Firestore usando Firebase 8.x Compat SDK
         window.db.collection('funil_gelatina_eventos')
             .add(event)
             .then(function (docRef) {
@@ -110,6 +110,7 @@
     // ========================================================================
     window.initTracking = initTracking;
     window.trackStep = trackStep;
+    window.trackFirebaseStep = trackStep; // Alias para compatibilidade
     window.sendEventToFirebase = sendEventToFirebase;
     window.getDeviceType = getDeviceType;
 
