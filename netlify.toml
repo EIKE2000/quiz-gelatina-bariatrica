@@ -1,87 +1,27 @@
 # ============================================================================
 # CONFIGURAÇÃO NETLIFY - Quiz Gelatina Bariátrica
 # ============================================================================
-# Este arquivo configura headers, redirects e otimizações para o Netlify
-# ============================================================================
 
-# ----------------------------------------------------------------------------
-# HEADERS - Segurança e CORS
-# ----------------------------------------------------------------------------
+# BUILD SETTINGS - RAIZ DO PROJETO
+[build]
+  publish = "."
+  command = ""
+
+# HEADERS - Permitir Firebase e Scripts
 [[headers]]
   for = "/*"
   [headers.values]
-    # Permitir carregamento de scripts e recursos
     X-Frame-Options = "SAMEORIGIN"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    
-    # Content Security Policy - Permitir Firebase e scripts locais
-    Content-Security-Policy = """
-      default-src 'self'; 
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://*.firebaseapp.com https://*.firebase.google.com; 
-      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
-      font-src 'self' https://fonts.gstatic.com; 
-      img-src 'self' data: https:; 
-      connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://firestore.googleapis.com wss://*.firebaseio.com; 
-      frame-src https://fast.wistia.net https://fast.wistia.com;
-    """
-    
-    # Cache Control - Desabilitar cache para JS/HTML
     Cache-Control = "public, max-age=0, must-revalidate"
 
-# ----------------------------------------------------------------------------
-# HEADERS - Arquivos JavaScript
-# ----------------------------------------------------------------------------
 [[headers]]
   for = "/*.js"
-  [headers.values]
-    Content-Type = "application/javascript; charset=utf-8"
-    Cache-Control = "public, max-age=0, must-revalidate"
-    Access-Control-Allow-Origin = "*"
-
-# ----------------------------------------------------------------------------
-# HEADERS - Arquivos HTML
-# ----------------------------------------------------------------------------
-[[headers]]
-  for = "/*.html"
-  [headers.values]
-    Cache-Control = "public, max-age=0, must-revalidate"
-
-# ----------------------------------------------------------------------------
-# HEADERS - Config.js (Firebase Config)
-# ----------------------------------------------------------------------------
-[[headers]]
-  for = "/config.js"
   [headers.values]
     Content-Type = "application/javascript; charset=utf-8"
     Cache-Control = "no-cache, no-store, must-revalidate"
     Access-Control-Allow-Origin = "*"
 
-# ----------------------------------------------------------------------------
-# REDIRECTS (Opcional)
-# ----------------------------------------------------------------------------
-# Redirecionar /quiz para /index.html
-[[redirects]]
-  from = "/quiz"
-  to = "/index.html"
-  status = 200
-
-# Redirecionar /analytics para /dashboard.html
-[[redirects]]
-  from = "/analytics"
-  to = "/dashboard.html"
-  status = 200
-
-# ----------------------------------------------------------------------------
-# BUILD SETTINGS
-# ----------------------------------------------------------------------------
-[build]
-  publish = "."
-  command = ""
-
-# ----------------------------------------------------------------------------
-# PLUGINS (Opcional - Cache Busting)
-# ----------------------------------------------------------------------------
-[[plugins]]
-  package = "@netlify/plugin-cache"
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "no-cache, no-store, must-revalidate"
