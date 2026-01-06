@@ -135,7 +135,9 @@
 
     <div class="chart-container">
         <h3 style="margin-top:0">Fluxo do Funil</h3>
-        <canvas id="funnelChart" height="300"></canvas>
+        <div style="position: relative; height: 300px;">
+            <canvas id="funnelChart"></canvas>
+        </div>
     </div>
 
     <div class="chart-container">
@@ -244,9 +246,16 @@
 
         let myChart = null;
         function updateChart(data) {
-            const ctx = document.getElementById('funnelChart').getContext('2d');
-            if (myChart) myChart.destroy();
+            const canvas = document.getElementById('funnelChart');
+            const ctx = canvas.getContext('2d');
 
+            // Destruir chart anterior completamente
+            if (myChart) {
+                myChart.destroy();
+                myChart = null;
+            }
+
+            // Criar novo chart
             myChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -259,7 +268,17 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: false
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
                 }
             });
         }
