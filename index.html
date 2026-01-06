@@ -1305,94 +1305,20 @@
         })();
     </script>
 
-    <!-- FIREBASE INTEGRATION -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+    <!-- ========================================================================
+         FIREBASE & TRACKING INTEGRATION (NOVA VERSÃO)
+         ======================================================================== -->
 
-        // TODO: REPLACE WITH YOUR FIREBASE CONFIG
-        // Configuração Dinâmica (Tenta config.js, senão usa placeholder)
-        let firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT_ID.appspot.com",
-            messagingSenderId: "SENDER_ID",
-            appId: "APP_ID"
-        };
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
 
-        try {
-            const module = await import('./config.js');
-            if (module.firebaseConfig && module.firebaseConfig.apiKey !== "COLE_SUA_API_KEY_AQUI") {
-                firebaseConfig = module.firebaseConfig;
-                console.log("Variáveis de ambiente carregadas de config.js");
-            }
-        } catch (e) {
-            console.log("Modo Standalone (sem config.js ou erro de CORS no file://). Configure manualmente se desejar persistência.");
-        }
+    <!-- Firebase Config (inicializa Firebase e cria window.db) -->
+    <script src="firebase-config.js"></script>
 
-        // Initialize Firebase (Try/Catch to avoid blocking UI if config missing)
-        let db;
-        try {
-            const app = initializeApp(firebaseConfig);
-            db = getFirestore(app);
-            console.log("Firebase initialized successfully");
-        } catch (e) {
-            console.warn("Firebase config missing or invalid. Events will be logged to console only.");
-        }
+    <!-- Sistema de Tracking (aguarda Firebase estar pronto) -->
+    <script src="tracking.js"></script>
 
-        const sessionId = localStorage.getItem('funnel_session_id') || 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-        localStorage.setItem('funnel_session_id', sessionId);
-
-        const stepNames = {
-            0: "Landing Page",
-            1: "Q1: Peso",
-            2: "Q2: Obstáculo",
-            3: "Q3: Corpo (Visual)",
-            4: "Reset 1: Scanner",
-            5: "Q4: Sintomas",
-            6: "Q5: Travado",
-            7: "Q6: Autoestima",
-            8: "Reset 2: Depoimentos",
-            9: "Q7: Inchaço",
-            10: "Q8: Retenção",
-            11: "Q9: Queimar",
-            12: "Data Input",
-            13: "Loading Analysis",
-            14: "VSL / Oferta"
-        };
-
-        // EXPOSE TRACKING FUNCTION GLOBALLY
-        window.trackFirebaseStep = async (stepId) => {
-            const stepName = stepNames[stepId] || `Step ${stepId}`;
-            const eventData = {
-                funnel: 'gelatina',
-                etapa_id: stepId,
-                etapa_nome: stepName,
-                session_id: sessionId,
-                timestamp_entrada: serverTimestamp ? serverTimestamp() : new Date(),
-                status: 'visualizou',
-                dispositivo: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
-                origem_trafego: new URLSearchParams(window.location.search).get('utm_source') || 'direct',
-                is_test: (window.self !== window.top) || /bot|googlebot|crawler|spider|robot|crawling|headless/i.test(navigator.userAgent) || window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || new URLSearchParams(window.location.search).get('test') === 'true'
-            };
-
-            console.log("📡 TRACKING EVENT:", eventData);
-
-            if (db) {
-                try {
-                    await addDoc(collection(db, "funil_gelatina_eventos"), eventData);
-                } catch (e) {
-                    console.error("Error adding document: ", e);
-                }
-            }
-        };
-
-        // Track initial landing if Step 0 is active
-        if (!document.getElementById('step-0').classList.contains('hidden')) {
-            window.trackFirebaseStep(0);
-        }
-    </script>
 </body>
 
 </html>
