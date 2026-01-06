@@ -270,24 +270,38 @@
             </div>
         </div>
         <div class="kpi-card">
-            <div class="kpi-label">📺 Visualizações do VSL</div>
-            <div id="kpi-conversion" class="kpi-value">0%</div>
+            <div class="kpi-label">� Vendas Totais</div>
+            <div id="kpi-sales" class="kpi-value" style="color:var(--success)">0</div>
             <div class="kpi-trend trend-neutral">
-                <span id="kpi-conversion-info">% que chegou ao vídeo</span>
+                <span id="kpi-sales-info">Aguardando vendas...</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">🎯 Taxa de Conversão</div>
+            <div id="kpi-conversion-rate" class="kpi-value">0%</div>
+            <div class="kpi-trend trend-neutral">
+                <span id="kpi-conversion-rate-info">Visitantes → Vendas</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">� Receita Total</div>
+            <div id="kpi-revenue" class="kpi-value" style="color:var(--success); font-size:28px">R$ 0</div>
+            <div class="kpi-trend trend-neutral">
+                <span id="kpi-revenue-info">Faturamento total</span>
+            </div>
+        </div>
+        <div class="kpi-card">
+            <div class="kpi-label">📺 Visualizações VSL</div>
+            <div id="kpi-vsl" class="kpi-value">0%</div>
+            <div class="kpi-trend trend-neutral">
+                <span id="kpi-vsl-info">% que chegou ao vídeo</span>
             </div>
         </div>
         <div class="kpi-card">
             <div class="kpi-label">⏱️ Tempo Médio</div>
             <div id="kpi-avg-time" class="kpi-value">0s</div>
             <div class="kpi-trend trend-neutral">
-                <span id="kpi-time-info">Por sessão completa</span>
-            </div>
-        </div>
-        <div class="kpi-card">
-            <div class="kpi-label">🔴 Maior Abandono</div>
-            <div id="kpi-bottleneck" class="kpi-value" style="color:var(--danger)">-</div>
-            <div class="kpi-trend trend-down">
-                <span id="kpi-bottleneck-info">Esperando dados...</span>
+                <span id="kpi-time-info">Por sessão</span>
             </div>
         </div>
     </div>
@@ -301,6 +315,32 @@
         <div style="position: relative; height: 350px;">
             <canvas id="funnelChart"></canvas>
         </div>
+    </div>
+
+    <!-- Vendas Recentes -->
+    <div class="chart-container">
+        <div class="chart-header">
+            <h3>💰 Vendas Recentes (Hotmart)</h3>
+            <span class="chart-info" id="sales-count">0 vendas</span>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <thEmail< /th>
+                        <th>Nome</th>
+                        <th>Valor</th>
+                        <th>Data/Hora</th>
+                </tr>
+            </thead>
+            <tbody id="salesTableBody">
+                <tr>
+                    <td colspan="4" class="empty-state">
+                        <div class="empty-state-icon">💸</div>
+                        <div>Aguardando primeira venda...</div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 
     <!-- Tabela de Eventos Recentes -->
@@ -360,6 +400,7 @@
 
         // Carregar Dados
         function loadData() {
+            // Carregar eventos do quiz
             db.collection('funil_gelatina_eventos')
                 .limit(500)
                 .onSnapshot(
@@ -370,9 +411,24 @@
                         processAndRender(events);
                     },
                     error => {
-                        console.error('❌ Erro:', error);
+                        console.error('❌ Erro ao carregar eventos:', error);
                         document.getElementById('connection-status').innerText = "Erro ao Carregar";
                         document.getElementById('connection-status').className = "status-badge status-error";
+                    }
+                );
+
+            // Carregar conversões (vendas)
+            db.collection('conversoes')
+                .limit(100)
+                .onSnapshot(
+                    snapshot => {
+                        console.log('💰 Conversões recebidas:', snapshot.size);
+                        const conversions = [];
+                        snapshot.forEach(doc => conversions.push(doc.data()));
+                        renderSalesData(conversions);
+                    },
+                    error => {
+                        console.error('❌ Erro ao carregar conversões:', error);
                     }
                 );
         }
@@ -583,6 +639,56 @@
                     </td>
                 </tr>
             `;
+        }
+
+        // Renderizar Dados de Vendas
+        function renderSalesData(conversions) {
+            const salesTable = document.getElementById('salesTableBody');
+
+            if (conversions.length === 0) {
+                document.getElementById('kpi-sales').innerText = '0';
+                document.getElementById('kpi-sales-info').innerText = 'Aguardando primeira venda';
+                document.getElementById('kpi-conversion-rate').innerText = '0%';
+                document.getElementById('kpi-revenue').innerText = 'R$ 0';
+                document.getElementById('sales-count').innerText = '0 vendas';
+                return;
+            }
+
+            // Atualizar KPIs de Vendas
+            const totalSales = conversions.length;
+            const totalRevenue = conversions.reduce((sum, c) => sum + (c.value || 0), 0);
+
+            document.getElementById('kpi-sales').innerText = totalSales;
+            document.getElementById('kpi-sales-info').innerText = `${totalSales} ${totalSales === 1 ? 'venda' : 'vendas'} realizadas`;
+
+            // Calcular taxa de conversão real (vendas / visitantes únicos)
+            const visitors = document.getElementById('kpi-visitors').innerText;
+            const conversionRate = visitors > 0 ? ((totalSales / parseInt(visitors)) * 100).toFixed(1) : 0;
+            document.getElementById('kpi-conversion-rate').innerText = `${conversionRate}%`;
+            document.getElementById('kpi-conversion-rate-info').innerText = `${totalSales} de ${visitors} visitantes`;
+
+            // Receita total
+            document.getElementById('kpi-revenue').innerText = `R$ ${totalRevenue.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            document.getElementById('kpi-revenue-info').innerText = `Ticket médio: R$ ${(totalRevenue / totalSales).toFixed(2)}`;
+
+            document.getElementById('sales-count').innerText = `${totalSales} ${totalSales === 1 ? 'venda' : 'vendas'}`;
+
+            // Renderizar tabela
+            const html = conversions.slice(0, 10).map(c => {
+                const date = c.timestamp ? new Date(c.timestamp.toDate()).toLocaleString('pt-BR') : 'N/A';
+                const value = c.value ? `R$ ${c.value.toFixed(2)}` : 'N/A';
+
+                return `
+                    <tr>
+                        <td><strong>${c.email || 'N/A'}</strong></td>
+                        <td>${c.name || '-'}</td>
+                        <td><strong style="color:var(--success)">${value}</strong></td>
+                        <td>${date}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            salesTable.innerHTML = html;
         }
     </script>
 </body>
