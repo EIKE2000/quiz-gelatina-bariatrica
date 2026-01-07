@@ -523,20 +523,21 @@
         }
 
         function renderKPIs(metrics) {
+            // Visitantes Únicos
             document.getElementById('kpi-visitors').innerText = metrics.totalSessions.toLocaleString();
             document.getElementById('kpi-visitors-trend').innerText = `${metrics.stepCounts[0]} entraram no funil`;
 
-            document.getElementById('kpi-conversion').innerText = `${metrics.conversionRate}%`;
-            document.getElementById('kpi-conversion-info').innerText = `${metrics.stepCounts[14]} chegaram ao VSL`;
+            // Visualizações VSL
+            document.getElementById('kpi-vsl').innerText = `${metrics.conversionRate}%`;
+            document.getElementById('kpi-vsl-info').innerText = `${metrics.stepCounts[14]} chegaram ao VSL`;
 
+            // Tempo Médio
             const mins = Math.floor(metrics.avgTime / 60);
             const secs = metrics.avgTime % 60;
             document.getElementById('kpi-avg-time').innerText = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
             document.getElementById('kpi-time-info').innerText = 'Tempo médio no funil';
 
-            document.getElementById('kpi-bottleneck').innerText = metrics.bottleneck;
-            document.getElementById('kpi-bottleneck-info').innerText = `${metrics.maxDrop.toFixed(0)}% de abandono`;
-
+            // Funnel Info
             document.getElementById('funnel-info').innerText = `${metrics.totalSessions} visitantes rastreados`;
         }
 
