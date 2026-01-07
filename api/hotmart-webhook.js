@@ -60,15 +60,10 @@ export default async function handler(req, res) {
         }
 
         try {
-            // 1. Buscar lead pelo email (últimos 30 dias)
-            const thirtyDaysAgo = new Date();
-            thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
+            // 1. Buscar lead pelo email (query simplificada - sem índice necessário)
             const leadSnapshot = await db.collection('quiz_leads')
                 .where('email', '==', buyer.email)
                 .where('converted', '==', false)
-                .where('timestamp', '>=', admin.firestore.Timestamp.fromDate(thirtyDaysAgo))
-                .orderBy('timestamp', 'desc')
                 .limit(1)
                 .get();
 
