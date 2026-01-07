@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1e1e1e;
+            color: #d4d4d4;
+        }
+
+        .log {
+            background: #252526;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 3px solid #0e639c;
+            border-radius: 4px;
+        }
+
+        .success {
+            border-left-color: #4ec9b0;
+            color: #4ec9b0;
+        }
+
+        .error {
+            border-left-color: #f48771;
+            color: #f48771;
+        }
+
+        .loading {
+            border-left-color: #dcdcaa;
+            color: #dcdcaa;
+        }
+
+        pre {
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Dashboard Debug Mode</h1>
+    <div id="logs"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
+    <script>
+        const logsDiv = document.getElementById('logs');
+
+        function log(message, type = 'loading') {
+            const div = document.createElement('div');
+            div.className = `log ${type}`;
+            div.innerHTML = `<strong>${new Date().toLocaleTimeString()}</strong> ${message}`;
+            logsDiv.appendChild(div);
+            console.log(message);
+        }
+
+        log('🚀 Iniciando dashboard debug...', 'loading');
+
+        // Firebase Config
+        const firebaseConfig = {
+            apiKey: "AIzaSyBeIIA97vpnYIiaORABA6oDveHgNS3Oa-U",
+            authDomain: "quiz-gelatina-bariatrica.firebaseapp.com",
+            projectId: "quiz-gelatina-bariatrica",
+            storageBucket: "quiz-gelatina-bariatrica.firebasestorage.app",
+            messagingSenderId: "531053725080",
+            appId: "1:531053725080:web:fa69c69d4c68ef366a57ed"
+        };
+
+        try {
+            log('📦 Inicializando Firebase...', 'loading');
+            firebase.initializeApp(firebaseConfig);
+            log('✅ Firebase inicializado!', 'success');
+
+            const db = firebase.firestore();
+            log('✅ Firestore conectado!', 'success');
+
+            // Teste 1: Buscar eventos
+            log('📊 Buscando eventos do quiz...', 'loading');
+            db.collection('funil_gelatina_eventos')
+                .limit(5)
+                .get()
+                .then(snapshot => {
+                    log(`✅ Eventos encontrados: ${snapshot.size}`, 'success');
+                    if (snapshot.size > 0) {
+                        snapshot.forEach(doc => {
+                            log(`<pre>${JSON.stringify(doc.data(), null, 2)}</pre>`, 'success');
+                        });
+                    } else {
+                        log('⚠️ Nenhum evento no Firestore ainda', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Erro ao buscar eventos: ${error.message}`, 'error');
+                    log(`<pre>${error.stack}</pre>`, 'error');
+                });
+
+            // Teste 2: Buscar leads
+            log('👤 Buscando leads...', 'loading');
+            db.collection('quiz_leads')
+                .limit(5)
+                .get()
+                .then(snapshot => {
+                    log(`✅ Leads encontrados: ${snapshot.size}`, 'success');
+                    if (snapshot.size > 0) {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            log(`Lead: ${data.email} | Converted: ${data.converted}`, 'success');
+                        });
+                    } else {
+                        log('⚠️ Nenhum lead cadastrado ainda', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Erro ao buscar leads: ${error.message}`, 'error');
+                    log(`<pre>${error.stack}</pre>`, 'error');
+                });
+
+            // Teste 3: Buscar conversões
+            log('💰 Buscando conversões...', 'loading');
+            db.collection('conversoes')
+                .limit(5)
+                .get()
+                .then(snapshot => {
+                    log(`✅ Conversões encontradas: ${snapshot.size}`, 'success');
+                    if (snapshot.size > 0) {
+                        snapshot.forEach(doc => {
+                            const data = doc.data();
+                            log(`Venda: ${data.email} | R$ ${data.value} | ${data.transaction_id}`, 'success');
+                        });
+                    } else {
+                        log('⚠️ Nenhuma conversão ainda', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ Erro ao buscar conversões: ${error.message}`, 'error');
+                    log(`<pre>${error.stack}</pre>`, 'error');
+                });
+
+            // Teste 4: Listener em tempo real
+            log('🔄 Iniciando listener de eventos em tempo real...', 'loading');
+            db.collection('funil_gelatina_eventos')
+                .limit(10)
+                .onSnapshot(
+                    snapshot => {
+                        log(`🔄 Listener ativado! ${snapshot.size} eventos rastreados`, 'success');
+                    },
+                    error => {
+                        log(`❌ Erro no listener: ${error.message}`, 'error');
+                    }
+                );
+
+        } catch (error) {
+            log(`❌ ERRO CRÍTICO: ${error.message}`, 'error');
+            log(`<pre>${error.stack}</pre>`, 'error');
+        }
+    </script>
+</body>
+
+</html>
