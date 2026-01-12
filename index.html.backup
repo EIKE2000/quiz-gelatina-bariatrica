@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Análise Metabólica - Protocolo Bariátrico</title>
+
+    <!-- VTurb Speed Optimization -->
+    <script>!function (i, n) { i._plt = i._plt || (n && n.timeOrigin ? n.timeOrigin + n.now() : Date.now()) }(window, performance);</script>
+    <link rel="preload"
+        href="https://scripts.converteai.net/47c06bcf-e718-4c54-92a3-0d974afccfc6/players/695eb72cda723d6f86838128/v4/player.js"
+        as="script">
+    <link rel="preload" href="https://scripts.converteai.net/lib/js/smartplayer-wc/v4/smartplayer.js" as="script">
+    <link rel="preload"
+        href="https://cdn.converteai.net/47c06bcf-e718-4c54-92a3-0d974afccfc6/695eb66793850164e9f97967/main.m3u8"
+        as="fetch">
+    <link rel="dns-prefetch" href="https://cdn.converteai.net">
+    <link rel="dns-prefetch" href="https://scripts.converteai.net">
+    <link rel="dns-prefetch" href="https://images.converteai.net">
+    <link rel="dns-prefetch" href="https://api.vturb.com.br">
+
+    <!-- UTMify Pixel Code -->
+    <script>
+        window.pixelId = "69630ba6637c02f93718893a";
+        var a = document.createElement("script");
+        a.setAttribute("async", "");
+        a.setAttribute("defer", "");
+        a.setAttribute("src", "https://cdn.utmify.com.br/scripts/pixel/pixel.js");
+        document.head.appendChild(a);
+    </script>
+    <!-- End UTMify Pixel Code -->
+
+    <!-- UTMify - Advanced UTM Tracking -->
+    <script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck
+        data-utmify-prevent-subids async defer></script>
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #d63384;
+            --primary-light: #fff0f5;
+            --secondary: #9b59b6;
+            --accent: #e91e63;
+            --bg-gradient-start: #fdfbfb;
+            --bg-gradient-end: #ebedee;
+            --text-dark: #2c3e50;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background: #fff;
+            color: var(--text-dark);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease forwards;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(214, 51, 132, 0.7);
+            }
+
+            70% {
+                transform: scale(1.02);
+                box-shadow: 0 0 0 10px rgba(214, 51, 132, 0);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(214, 51, 132, 0);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* Transitions */
+        .screen {
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- THEME: REPORT (Step 0) --- */
+        .theme-report {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+        }
+
+        .report-header {
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            color: #888;
+            letter-spacing: 1px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .headline {
+            font-size: 1.8rem;
+            line-height: 1.3;
+            color: #222;
+        }
+
+        .report-img {
+            width: 100%;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        /* CTA BOX PREMIUM */
+        .cta-box-premium {
+            background: linear-gradient(145deg, #ffffff, #f9f9f9);
+            border: 1px solid #eee;
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative background blob for premium feel */
+        .cta-box-premium::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(214, 51, 132, 0.05) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .cta-btn-premium {
+            background: linear-gradient(90deg, #d63384 0%, #e91e63 100%);
+            color: white;
+            border: none;
+            padding: 20px 25px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            border-radius: 50px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 15px 30px rgba(255, 75, 43, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            z-index: 2;
+            margin: 0 auto;
+        }
+
+        .cta-btn-premium:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(255, 75, 43, 0.5);
+        }
+
+        .scarcity-premium {
+            color: #777;
+            font-size: 0.95rem;
+            margin: 15px 0 25px;
+            font-weight: 400;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Benefits Cards */
+        .benefit-card {
+            background: white;
+            padding: 15px;
+            border-radius: 16px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.03);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+            border: 1px solid #f0f0f0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefit-icon {
+            font-size: 1.2rem;
+            background: #fff0f5;
+            color: #d63384;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            flex-shrink: 0;
+        }
+
+        .benefit-card p {
+            font-size: 0.9rem;
+            color: #555;
+            margin: 0;
+            line-height: 1.4;
+        }
+
+        /* --- THEME: QUIZ (Blocks 2+) --- */
+        body.quiz-mode {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 10px;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            padding: 30px 25px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.6);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        .question-text {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .question-sub {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 25px;
+            font-weight: 400;
+            line-height: 1.5;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: white;
+            border: 2px solid #f0f0f0;
+            padding: 18px 20px;
+            border-radius: 16px;
+            text-align: left;
+            font-size: 1rem;
+            color: #444;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-weight: 500;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: var(--primary-light);
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(214, 51, 132, 0.1);
+        }
+
+        /* --- MODERN TECH SCANNER (Health Tech Style) --- */
+        .scanner-container {
+            height: 320px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 20px auto 30px;
+            background: #000;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .scanner-bg-image {
+            position: absolute;
+            inset: 0;
+            background-image: url('https://i.imgur.com/g7mKApV.jpeg');
+            background-size: cover;
+            background-position: center;
+            filter: blur(4px) contrast(0.9) brightness(0.6);
+            opacity: 0.8;
+            z-index: 0;
+        }
+
+        .tech-grid-overlay {
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .body-silhouette-svg {
+            height: 260px;
+            width: auto;
+            opacity: 0.8;
+            color: rgba(255, 255, 255, 0.9);
+            filter: drop-shadow(0 0 15px rgba(214, 51, 132, 0.4));
+            z-index: 2;
+        }
+
+        .scan-line-modern {
+            width: 90%;
+            height: 3px;
+            background: #fff;
+            box-shadow:
+                0 0 10px #d63384,
+                0 0 20px #d63384,
+                0 0 30px #d63384,
+                0 0 50px #d63384;
+            position: absolute;
+            top: 20px;
+            z-index: 3;
+            animation: modernScan 2.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            border-radius: 50%;
+            opacity: 1;
+        }
+
+        .scan-status {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            padding: 8px 18px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            z-index: 4;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .blinking-dot {
+            width: 8px;
+            height: 8px;
+            background: #d63384;
+            box-shadow: 0 0 10px #d63384;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes modernScan {
+            0% {
+                top: 20px;
+                opacity: 0;
+                transform: scaleX(0.8);
+            }
+
+            10% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+
+            90% {
+                opacity: 1;
+                transform: scaleX(1);
+            }
+
+            100% {
+                top: 280px;
+                opacity: 0;
+                transform: scaleX(0.8);
+            }
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        /* Visual Carousel (Auto) */
+        .visual-carousel-container {
+            width: 100%;
+            height: 400px;
+            /* Aumentado para exibir imagens verticais inteiras */
+            border-radius: 16px;
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            background: #f8f8f8;
+        }
+
+        .v-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* Garante que a imagem apareça inteira */
+            opacity: 0;
+            transition: opacity 0.8s ease;
+        }
+
+        .v-slide.active {
+            opacity: 1;
+        }
+
+        /* Testimonials */
+        /* Testimonials */
+        .testimonial-card {
+            border-radius: 15px;
+            padding: 20px 15px;
+            background: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin: 5px 0 20px 0;
+            border: 1px solid #f0f0f0;
+            text-align: center;
+        }
+
+        .user-quote {
+            font-style: italic;
+            color: #555;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #eee;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .user-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* Loader */
+        .analysis-loader {
+            width: 80px;
+            height: 80px;
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid var(--primary);
+            border-radius: 50%;
+            margin: 30px auto;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* IMAGE GRID STYLES FOR STEP 3 */
+        .options-grid-visual {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .option-card {
+            background: white;
+            border: 1px solid #f0f0f0;
+            border-radius: 16px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(214, 51, 132, 0.2);
+            border-color: var(--primary);
+        }
+
+        .option-card img {
+            width: 100%;
+            height: 110px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-light);
+        }
+
+        .option-card span {
+            padding: 12px 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 480px) {
+            .options-grid-visual {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* MODERN DIAGNOSIS */
+        .diag-modern-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px 20px;
+        }
+
+        .badge-alert {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: #fff0f0;
+            color: #d63384;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .video-wrapper-glow {
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(214, 51, 132, 0.3);
+            margin-top: 20px;
+            background: #000;
+            position: relative;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
+</head>
+
+<body>
+
+    <main id="app">
+
+        <!-- STEP 0: LANDING -->
+        <div id="step-0" class="screen theme-report active">
+            <header class="report-header">EL PAÍS · CIENCIA Y SALUD · METABOLISMO</header>
+
+            <h1 class="headline" style="font-weight: 800; margin-bottom: 20px;">
+                La actriz Cecilia Navia sorprende a especialistas al secar <span style="color:#d63384;">8.4 kg</span> en
+                solo
+                <span style="color:#d63384;">21 días</span> con una "Gelatina Bariátrica" que supera los efectos de
+                Ozempic y Mounjaro.
+            </h1>
+
+            <h2 class="subheadline"
+                style="font-size: 1.15rem; line-height: 1.6; color: #4a4a4a; font-weight: 400; margin-bottom: 25px;">
+                Descubre la fórmula exacta de la <strong>Gelatina Bariátrica</strong>: una combinación de activos
+                naturales que
+                crean una "esponja metabólica" en el estómago, bloquean la compulsión alimentaria y fuerzan al cuerpo a
+                <span
+                    style="background: #fff0f5; padding: 2px 6px; border-radius: 4px; color: #d63384; font-weight: 600;">quemar
+                    grasa 24h al día</span>.
+            </h2>
+
+            <img src="https://i.imgur.com/xJ5OphZ.jpeg" alt="Cecilia Navia" class="report-img">
+
+            <div class="cta-box-premium">
+                <button class="cta-btn-premium pulse" onclick="startQuiz()">
+                    HACER EL TEST GRATUITO AHORA
+                </button>
+                <p class="scarcity-premium">
+                    Quedan solo <strong><span id="spots-left">127</span> lugares</strong> disponibles para el test
+                    metabólico gratuito.
+                </p>
+                <!-- Benefits -->
+                <!-- Benefits List -->
+                <div class="benefits-grid" style="display:flex; flex-direction:column; gap:16px;">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <!-- Icon: Activity/Chart -->
+                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                            </svg>
+                        </div>
+                        <p>Descubre si tu cuerpo está preparado para perder entre <strong>6.3 y 11.4 kg</strong> en los
+                            próximos 21 días.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <!-- Icon: Flask/Science -->
+                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 2v7.31" />
+                                <path d="M14 2v7.31" />
+                                <path d="M8.5 2h7" />
+                                <path d="M14 9.3a6.5 6.5 0 1 1-4 0c0-3.22 0-3.7-.04-7.3" />
+                                <path
+                                    d="M5.52 19c.56-.56 1.34-1 2.48-1s1.92.44 2.48 1c.56.56 1.34 1 2.48 1s1.92-.44 2.48-1" />
+                            </svg>
+                        </div>
+                        <p>Mira qué versión de la receta funciona mejor para tu metabolismo.</p>
+                    </div>
+
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <!-- Icon: Wallet/Savings -->
+                            <svg class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="5" width="20" height="14" rx="2" />
+                                <line x1="2" y1="10" x2="22" y2="10" />
+                            </svg>
+                        </div>
+                        <p>Entérate cuánto ahorras en comparación con Ozempic y Mounjaro.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- QUIZ CONTAINER -->
+        <div id="quiz-frame" class="quiz-container hidden">
+            <div id="quiz-progress-container" class="hidden">
+                <div class="progress-bar">
+                    <div id="progress-fill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- STEP 1 -->
+            <div id="step-1" class="screen card hidden">
+                <h3 class="question-text">¿Cuántos kilos necesitas realmente eliminar de tu cuerpo?</h3>
+                <p class="question-sub">Tus respuestas determinarán qué versión del Protocolo de Gelatina Bariátrica es
+                    ideal para tu cuerpo.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(2)">Hasta 5 kg <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(2)">De 6 a 10 kg <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(2)">De 11 a 15 kg <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(2)">De 16 a 20 kg <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(2)">Más de 20 kg <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 2 -->
+            <div id="step-2" class="screen card hidden">
+                <h3 class="question-text">¿Cuál es el mayor obstáculo que te frena cuando decides comenzar a
+                    adelgazar?</h3>
+                <p class="question-sub">Identificar el verdadero bloqueo es el primer paso para desbloquear resultados
+                    reales.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(3)">Hago dieta por unos días y desisto
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(3)">Gimnasio sin resultado <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(3)">Ansiedad y compulsión <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(3)">Efecto rebote <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 3: IMAGES 2x2 -->
+            <div id="step-3" class="screen card hidden">
+                <h3 class="question-text">¿En qué parte del cuerpo te gustaría ver el resultado primero?</h3>
+                <p class="question-sub">Tu meta definirá exactamente qué versión del Protocolo de Gelatina Bariátrica es
+                    la más adecuada para tu cuerpo.</p>
+                <div class="options-grid-visual">
+                    <div class="option-card" onclick="nextStep(4)">
+                        <img src="https://i.imgur.com/sxdoef9.jpeg" alt="Abdomen">
+                        <span>Abdomen</span>
+                    </div>
+                    <div class="option-card" onclick="nextStep(4)">
+                        <img src="https://i.imgur.com/AzRVt5H.jpeg" alt="Muslos">
+                        <span>Muslos y caderas</span>
+                    </div>
+                    <div class="option-card" onclick="nextStep(4)">
+                        <img src="https://i.imgur.com/VsNLmIy.jpeg" alt="Glúteos">
+                        <span>Glúteos</span>
+                    </div>
+                    <div class="option-card" onclick="nextStep(4)">
+                        <img src="https://i.imgur.com/NYvBzP3.jpeg" alt="Brazos">
+                        <span>Brazos y espalda</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 4: TECH SCANNER RESET (UPDATED BACKGROUND) -->
+            <div id="step-4" class="screen card hidden"
+                style="padding: 0; background: transparent; border: none; box-shadow: none;">
+                <div
+                    style="background: white; border-radius: 24px; padding: 30px 20px; box-shadow: 0 15px 40px rgba(0,0,0,0.06);">
+
+                    <div class="scanner-container">
+                        <div class="scanner-bg-image"></div>
+                        <div class="tech-grid-overlay"></div>
+
+
+
+                        <div class="scan-line-modern"></div>
+
+                        <div class="scan-status">
+                            <div class="blinking-dot"></div>
+                            Analizando Metabolismo...
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; padding: 0 10px;">
+                        <h4 style="font-size: 1.1rem; color: #333; margin-bottom: 12px; font-weight: 700;">Identificando
+                            Patrones Ocultos</h4>
+                        <p style="font-size: 0.95rem; line-height: 1.6; color: #555; margin-bottom: 15px;">Estudios de
+                            Harvard indican que tu perfil contiene marcadores metabólicos específicos.</p>
+                        <p class="fade-in"
+                            style="font-size: 0.85rem; color: #888; animation-delay: 1.5s; font-weight: 500;">
+                            Procesando datos biométricos...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STEP 5 -->
+            <div id="step-5" class="screen card hidden">
+                <h3 class="question-text">¿Cuando intentas comer menos, sientes dolor de cabeza o debilidad?</h3>
+                <p class="question-sub">La fórmula de Gelatina Bariátrica estabiliza esos picos para que adelgaces
+                    sin sentir ninguna debilidad o mareo.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(6)">Sí, es automático <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">Sí, mi cuerpo entra en pánico
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">Me pongo irritada <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">Siento un vacío en el estómago
+                        <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 5 -->
+            <div id="step-5" class="screen card hidden">
+                <h3 class="question-text">¿Sientes que ya intentaste de todo y el cuerpo parece trabado?</h3>
+                <p class="question-sub">El Protocolo fue diseñado justamente para desbloquear metabolismos que se
+                    volvieron
+                    resistentes a dietas comunes.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(6)">Sí, es frustrante <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">Sí, varias veces <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">El cuerpo reacciona pero se traba
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(6)">Aún intentando entender <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 6 -->
+            <div id="step-6" class="screen card hidden">
+                <h3 class="question-text">¿Cuánto destruye tu autoestima tu cuerpo hoy?</h3>
+                <p class="question-sub">Recuperar tu autoconfianza y volver a amarte es el principal "efecto secundario"
+                    que las alumnas relatan en los primeros 10 días de uso de la gelatina.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(7)">Casi nada <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(7)">Un poco <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(7)">Bastante <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(7)">Totalmente <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 7: TESTIMONIALS -->
+            <div id="step-7" class="screen card hidden">
+                <p style="font-weight: 700; color: #d63384; font-size: 1.1rem; line-height: 1.4; margin-bottom: 15px;">
+                    Mientras dudas, otras ya están vistiendo ropa que no les servía hace años. <br>
+                    <span style="color: #444; font-weight: 500; font-size: 0.95rem;">Tu duda es lo único que mantiene
+                        a tu cuerpo como está.</span>
+                </p>
+
+                <!-- Auto Carousel -->
+                <div id="visual-carousel-frame" class="visual-carousel-container"></div>
+
+                <div id="testimonial-carousel"></div>
+                <div class="progress-bar" style="margin-top:20px;">
+                    <div id="testimonial-timer" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <!-- STEP 8 -->
+            <div id="step-8" class="screen card hidden">
+                <h3 class="question-text">¿Durante el día, sientes el cuerpo pesado e hinchado?</h3>
+                <p class="question-sub">Al activar las células quemadoras con la gelatina, tu cuerpo pasará a generar
+                    energía infinita usando tu propia grasa almacenada.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(9)">Sí, despierto sin energía <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(9)">Sí, exhausta después de comer
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(9)">El cuerpo se apaga <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(9)">Cuando estoy sentada mucho tiempo
+                        <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 9 -->
+            <div id="step-9" class="screen card hidden">
+                <h3 class="question-text">¿Incluso bebiendo poca agua, te hinchas fácilmente?</h3>
+                <p class="question-sub">La "esponja invisible" creada por la gelatina en el estómago ayuda a drenar esa
+                    retención de líquidos desde la primera semana.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(10)">Sí, todo el tiempo <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(10)">Sí, hasta la cara <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(10)">Piernas y barriga <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(10)">Al final del día <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 10 -->
+            <div id="step-10" class="screen card hidden">
+                <h3 class="question-text">Si pudieras comenzar a quemar grasa hoy, ¿darías el paso?</h3>
+                <p class="question-sub">Esta puede ser tu única oportunidad de acceder a la receta de Gelatina
+                    Bariátrica antes
+                    que los lugares para el test se agoten.</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(11)">Sí, con seguridad <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(11)">Sí, estoy decidida <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(11)">Sí, quiero ver diferencia <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 11 - NOVA PERGUNTA: Maior Medo -->
+            <div id="step-11" class="screen card hidden">
+                <h3 class="question-text">¿Cuál es tu mayor miedo en relación a perder peso?</h3>
+                <p class="question-sub">Entender tus preocupaciones nos ayuda a personalizar tu plan</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(12)">Efecto rebote (volver a engordar)
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(12)">No conseguir mantener los resultados
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(12)">Quedar débil o sin energía <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(12)">No tengo miedo, solo quiero empezar
+                        <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 12 - NOVA PERGUNTA: Histórico de Compra -->
+            <div id="step-12" class="screen card hidden">
+                <h3 class="question-text">¿Ya compraste algún producto para adelgazar antes?</h3>
+                <p class="question-sub">Tu experiencia anterior nos ayuda a crear la mejor estrategia para ti</p>
+                <div class="options-grid">
+                    <button class="option-btn" onclick="nextStep(13)">Nunca compré nada <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(13)">Sí, pero no funcionó <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(13)">Sí, funcionó pero volví a engordar
+                        <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(13)">Sí, estoy usando algo ahora
+                        <span>➜</span></button>
+                </div>
+            </div>
+
+            <!-- STEP 13 - FORMULÁRIO -->
+            <div id="step-13" class="screen card hidden">
+                <h3 class="question-text">Análisis Metabólico</h3>
+                <p class="question-sub">Ingresa tus datos para recibir tu diagnóstico personalizado.</p>
+                <div style="text-align:left; margin-bottom:20px;">
+                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Nombre *</label>
+                    <input id="input-name" type="text"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
+                        placeholder="Ej: María" required autocomplete="given-name">
+
+                    <label style="display:block; margin:20px 0 5px; font-weight:600;">Email *</label>
+                    <input id="input-email" type="email"
+                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
+                        placeholder="tu@email.com" required autocomplete="email">
+                </div>
+                <button class="cta-btn-premium" onclick="submitFormAndProceed()">🔥 GENERAR MI DIAGNÓSTICO</button>
+                <p id="form-error" style="color:#ef4444; margin-top:10px; display:none; font-size:14px;"></p>
+            </div>
+
+            <!-- STEP 14 -->
+            <!-- STEP 14: LOADING ANALYSIS -->
+            <div id="step-14" class="screen card hidden">
+                <div class="analysis-loader"></div>
+                <p id="analysis-status" class="analysis-text" style="font-weight:600; color:#555; text-align:center;">
+                    Analizando tu metabolismo...</p>
+
+                <div class="progress-bar" style="margin-top: 20px;">
+                    <div id="analysis-bar" class="progress-fill" style="width: 0%;"></div>
+                </div>
+
+                <div style="margin-top: 25px; font-size: 0.9rem; color: #666; line-height: 1.5; text-align: center;">
+                    Estamos cruzando tus datos con miles de perfiles metabólicos para identificar exactamente en qué
+                    zona se encuentra tu cuerpo en este momento.
+                    <br><br>
+                    <span style="font-size: 0.85rem; opacity: 0.8;">Esto toma solo algunos segundos.</span>
+                </div>
+            </div>
+
+            <!-- STEP 15: DIAGNOSIS (FULL RESTORED) -->
+            <div id="step-15" class="screen diag-modern-card hidden">
+                <div class="diag-bg-anim"></div>
+                <div class="diag-content">
+                    <h2 style="margin-bottom: 25px; line-height: 1.2; font-size: 1.6rem; letter-spacing: -0.5px;">
+                        DIAGNÓSTICO FINALIZADO</h2>
+
+                    <div class="badge-alert">
+                        <span class="badge-icon">⚠️</span>
+                        <div style="display:flex; flex-direction:column; line-height:1.1;">
+                            <span style="font-size:0.7rem; opacity:0.8; font-weight:600;">ALERTA DE SALUD</span>
+                            <span>BLOQUEO INTESTINAL DETECTADO</span>
+                        </div>
+                    </div>
+
+                    <div class="diag-support-text"
+                        style="font-size:1.1rem; line-height:1.6; color:#444; margin-bottom:20px;">
+                        Tu cuerpo presenta señales claras de un <span
+                            style="background:#fff0f5; color:#d63384; padding:2px 5px; border-radius:4px; font-weight:700;">bloqueo
+                            metabólico silencioso</span>
+                        presente en el 87% de las mujeres que no logran adelgazar.
+                    </div>
+
+                    <p class="question-sub" style="font-size: 0.95rem; margin-bottom: 25px; color:#666;">
+                        Mira el video y descubre cómo el <strong style="color:var(--primary)">Protocolo de Gelatina
+                            Bariátrica</strong> desbloquea este bloqueo.
+                    </p>
+
+                    <!-- VIDEO AREA -->
+                    <div class="video-wrapper-glow">
+                        <vturb-smartplayer id="vid-695eb72cda723d6f86838128"
+                            style="display: block; margin: 0 auto; width: 100%;"></vturb-smartplayer>
+                        <script type="text/javascript">
+                            var s = document.createElement("script");
+                            s.src = "https://scripts.converteai.net/47c06bcf-e718-4c54-92a3-0d974afccfc6/players/695eb72cda723d6f86838128/v4/player.js",
+                                s.async = !0,
+                                document.head.appendChild(s);
+                        </script>
+                    </div>
+
+                    <div id="vsl-cta-container" class="hidden" style="margin-top: 30px;">
+                        <button class="cta-btn-premium pulse"
+                            onclick="window.location.href='https://pay.hotmart.com/D103362621T?checkoutMode=10&bid=1767216078733'">🟡
+                            Generar
+                            mi plan personalizado ahora</button>
+                        <p style="font-size: 0.75rem; color: #888; margin-top: 12px; font-weight:500;">Lleva menos de 2
+                            minutos y puede ser el paso más importante de tu vida.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        let currentStep = 0;
+        const totalSteps = 14;
+        const testimonials = [
+            { text: "Mi barriga se desinflamó en 3 días.", author: "Carla, 37", img: "👩" },
+            { text: "Nunca bajé de peso tan rápido.", author: "Ana, 42", img: "👱‍♀️" },
+            { text: "Me siento otra mujer.", author: "Patricia, 29", img: "👩‍🦰" }
+        ];
+
+        function showScreen(id) {
+            document.querySelectorAll('.screen').forEach(el => el.classList.add('hidden'));
+            const target = document.getElementById('step-' + id);
+            if (target) {
+                target.classList.remove('hidden');
+                updateProgress(id);
+            }
+            window.scrollTo(0, 0);
+        }
+
+        function updateProgress(step) {
+            const bar = document.getElementById('quiz-progress-container');
+            if (step >= 1 && step < 14) {
+                bar.classList.remove('hidden');
+                const pct = ((step - 1) / (13)) * 100;
+                document.getElementById('progress-fill').style.width = pct + '%';
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        function nextStep(id) {
+            // FIREBASE TRACKING HOOK
+            if (window.trackFirebaseStep) window.trackFirebaseStep(id);
+
+            currentStep = id;
+            if (id === 4) {
+                showScreen(4);
+                setTimeout(() => nextStep(5), 4000); // Scanner
+                return;
+            }
+            if (id === 8) {
+                showScreen(8);
+                runTestimonials();
+                return;
+            }
+            if (id === 13) {
+                showScreen(13);
+                runAnalysis();
+                return;
+            }
+            showScreen(id);
+        }
+
+        function startQuiz() {
+            document.body.classList.add('quiz-mode');
+            document.getElementById('step-0').classList.add('hidden');
+            document.getElementById('quiz-frame').classList.remove('hidden');
+            nextStep(1);
+        }
+
+        function runTestimonials() {
+            const container = document.getElementById('testimonial-carousel');
+            const imgContainer = document.getElementById('visual-carousel-frame');
+            const bar = document.getElementById('testimonial-timer');
+
+            // New Unified Data
+            const testimonialsData = [
+                {
+                    img: "https://i.imgur.com/qsM36RE.jpeg",
+                    text: "Mi barriga se desinflamó en 3 días.",
+                    author: "Carla, 37"
+                },
+                {
+                    img: "https://i.imgur.com/j09Q6lX.jpeg",
+                    text: "Mi ropa volvió a servirme en menos de una semana.",
+                    author: "Juliana, 42"
+                },
+                {
+                    img: "https://i.imgur.com/gVLpwFH.jpeg",
+                    text: "Nunca vi mi cuerpo responder tan rápido.",
+                    author: "Renata, 35"
+                }
+            ];
+
+            // Setup Images
+            if (imgContainer) {
+                imgContainer.innerHTML = testimonialsData.map((t, idx) =>
+                    `<img src="${t.img}" class="v-slide ${idx === 0 ? 'active' : ''}">`
+                ).join('');
+            }
+
+            // Start Bar Animation
+            bar.style.transition = 'width 6s linear';
+            setTimeout(() => bar.style.width = '100%', 50);
+
+            let currentIndex = 0;
+
+            // Function to update both
+            const updateSlide = () => {
+                const data = testimonialsData[currentIndex];
+
+                // Update Text with minimal structure
+                container.innerHTML = `
+                    <div class="testimonial-card slide-up">
+                        <p class="user-quote">"${data.text}"</p>
+                        <div class="user-info" style="justify-content:center;">
+                            <span class="user-name" style="color:#333; font-size:0.95rem;">${data.author}</span>
+                        </div>
+                    </div>
+                `;
+
+                // Update Image
+                if (imgContainer) {
+                    const slides = imgContainer.querySelectorAll('.v-slide');
+                    slides.forEach((slide, idx) => {
+                        if (idx === currentIndex) slide.classList.add('active');
+                        else slide.classList.remove('active');
+                    });
+                }
+
+                currentIndex = (currentIndex + 1) % testimonialsData.length;
+            };
+
+            // Run first immediately
+            updateSlide();
+
+            // Loop every 2s
+            const interval = setInterval(updateSlide, 2000);
+
+            // Finish after 6s (total cycle)
+            setTimeout(() => {
+                clearInterval(interval);
+                nextStep(9);
+            }, 6000);
+        }
+
+        function runAnalysis() {
+            const statusEl = document.getElementById('analysis-status');
+            const bar = document.getElementById('analysis-bar');
+
+            const steps = [
+                { txt: "Analizando tu metabolismo...", t: 1000 },
+                { txt: "Detectando nivel de actividad de las células quemadoras...", t: 2500 },
+                { txt: "Calculando índice de inflamación intestinal...", t: 4000 },
+                { txt: "Comparando con estudios de Harvard...", t: 5500 },
+                { txt: "Generando diagnóstico...", t: 6500 }
+            ];
+
+            bar.style.transition = 'width 7s linear';
+            setTimeout(() => { bar.style.width = '100%'; }, 100);
+
+            steps.forEach(s => {
+                setTimeout(() => {
+                    statusEl.innerText = s.txt;
+                    statusEl.classList.remove('fade-in');
+                    void statusEl.offsetWidth; // trigger reflow
+                    statusEl.classList.add('fade-in');
+                }, s.t);
+            });
+
+            setTimeout(() => {
+                nextStep(15);
+            }, 7000);
+        }
+
+        // ====================================================================
+        // FUNÇÃO: Salvar Lead e Prosseguir
+        // ====================================================================
+        async function submitFormAndProceed() {
+            const nameInput = document.getElementById('input-name');
+            const emailInput = document.getElementById('input-email');
+            const errorEl = document.getElementById('form-error');
+
+            // Validação
+            if (!nameInput.value.trim()) {
+                errorEl.textContent = '⚠️ Por favor, ingresa tu nombre';
+                errorEl.style.display = 'block';
+                nameInput.focus();
+                return;
+            }
+
+            if (!emailInput.value.trim()) {
+                errorEl.textContent = '⚠️ Por favor, ingresa tu email';
+                errorEl.style.display = 'block';
+                emailInput.focus();
+                return;
+            }
+
+            // Validar formato de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailInput.value)) {
+                errorEl.textContent = '⚠️ Email inválido. Usa el formato: tu@email.com';
+                errorEl.style.display = 'block';
+                emailInput.focus();
+                return;
+            }
+
+            errorEl.style.display = 'none';
+
+            // Desabilitar botão durante envio
+            const submitBtn = event.target;
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ ENVIANDO...';
+
+            try {
+                // Obter session_id
+                const sessionId = localStorage.getItem('funnel_session_id');
+
+                // Preparar dados (apenas nome e email)
+                const leadData = {
+                    session_id: sessionId,
+                    name: nameInput.value.trim(),
+                    email: emailInput.value.trim().toLowerCase()
+                };
+
+                // Enviar para API
+                const response = await fetch('/api/save-lead', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(leadData)
+                });
+
+                if (response.ok) {
+                    console.log('✅ Lead salvo com sucesso');
+
+                    // Rastrear conversão no UTMify Pixel
+                    if (window.utmifyPixel) {
+                        window.utmifyPixel.track('Lead', {
+                            email: leadData.email,
+                            name: leadData.name
+                        });
+                    }
+
+                    // Prosseguir para próximo step
+                    nextStep(14);
+                } else {
+                    throw new Error('Erro ao salvar lead');
+                }
+
+            } catch (error) {
+                console.error('❌ Erro:', error);
+                errorEl.textContent = '⚠️ Error al enviar. Verifica tu conexión e intenta nuevamente.';
+                errorEl.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🔥 GENERAR MI DIAGNÓSTICO';
+            }
+        }
+
+        function startScarcityCounter() {
+            let spots = 127;
+            const el = document.getElementById('spots-left');
+            if (!el) return;
+            setInterval(() => {
+                if (spots > 7) {
+                    spots--;
+                    el.innerText = spots;
+                }
+            }, 5000);
+        }
+
+        startScarcityCounter();
+
+        // VSL DELAY SCRIPT - VTURB SMARTPLAYER VERSION
+        (function () {
+            const DELAY_MINUTES = 15;
+            const DELAY_SECONDS = DELAY_MINUTES * 60;
+            const CTA_ID = "vsl-cta-container";
+            const PLAYER_ID = "vid-695eb72cda723d6f86838128";
+            const STORAGE_KEY = "vsl_watched_full_v4";
+
+            console.log("🎬 VSL Script: Iniciado. Delay configurado para", DELAY_MINUTES, "minutos (", DELAY_SECONDS, "segundos)");
+
+            function showCTA() {
+                const cta = document.getElementById(CTA_ID);
+                if (cta && cta.classList.contains('hidden')) {
+                    cta.classList.remove('hidden');
+                    try {
+                        localStorage.setItem(STORAGE_KEY, "true");
+                        console.log("✅ VSL: CTA REVELADO COM SUCESSO!");
+                    } catch (e) {
+                        console.error("❌ Erro ao salvar no localStorage:", e);
+                    }
+                } else if (!cta) {
+                    console.error("❌ Elemento CTA não encontrado:", CTA_ID);
+                } else {
+                    console.log("ℹ️ CTA já está visível");
+                }
+            }
+
+            // 1. Verificação de Persistência
+            try {
+                if (localStorage.getItem(STORAGE_KEY) === "true") {
+                    console.log("✅ Detectado: Vídeo já foi assistido anteriormente");
+                    setTimeout(showCTA, 1000);
+                } else {
+                    console.log("ℹ️ Primeira visualização detectada");
+                }
+            } catch (e) {
+                console.error("❌ Erro ao verificar localStorage:", e);
+            }
+
+            // 2. Integração SmartPlayer (Vturb)
+            let smartplayer = null;
+            let checkPlayerInterval = setInterval(function () {
+                // Tentar acessar o SmartPlayer
+                if (window.smartplayer && window.smartplayer.instances) {
+                    const instances = window.smartplayer.instances;
+
+                    // Procurar instância pelo ID
+                    smartplayer = instances.find(p => p.id === PLAYER_ID);
+
+                    if (!smartplayer && instances.length > 0) {
+                        // Fallback: usar primeira instância
+                        smartplayer = instances[0];
+                    }
+
+                    if (smartplayer) {
+                        console.log("✅ SmartPlayer detectado:", smartplayer.id);
+                        clearInterval(checkPlayerInterval);
+
+                        // Monitorar progresso do vídeo
+                        smartplayer.on('timeupdate', function (event) {
+                            const currentTime = event.detail.currentTime;
+
+                            // Log a cada minuto
+                            if (Math.floor(currentTime) % 60 === 0 && Math.floor(currentTime) > 0) {
+                                console.log("⏱️ Tempo decorrido:", Math.floor(currentTime / 60), "min /", DELAY_MINUTES, "min");
+                            }
+
+                            // Verificar se atingiu 15 minutos
+                            if (currentTime >= DELAY_SECONDS) {
+                                console.log("🎯 15 MINUTOS ALCANÇADOS!", currentTime, "segundos");
+                                showCTA();
+                            }
+                        });
+                    }
+                }
+            }, 500); // Verificar a cada 500ms
+
+            // Limpar interval após 30 segundos
+            setTimeout(() => {
+                if (checkPlayerInterval) {
+                    clearInterval(checkPlayerInterval);
+                    if (!smartplayer) {
+                        console.warn("⚠️ SmartPlayer não detectado após 30s, usando apenas failsafe timer");
+                    }
+                }
+            }, 30000);
+
+            // 3. ⚡ FAILSAFE ABSOLUTO - FORÇA O BOTÃO APARECER APÓS 15 MIN
+            // Este timer força a exibição independente dos outros métodos
+            const absoluteTimer = setTimeout(function () {
+                const cta = document.getElementById(CTA_ID);
+                if (cta && cta.classList.contains('hidden')) {
+                    console.log("⚡ FAILSAFE ATIVADO: Forçando CTA após 15 minutos (timer absoluto)");
+                    showCTA();
+                } else {
+                    console.log("✅ Timer absoluto: CTA já está visível (não precisa forçar)");
+                }
+            }, DELAY_SECONDS * 1000); // 15 minutos em milissegundos
+
+            // 4. Fallback de Emergência (Manual)
+            console.log("💡 Para testar manualmente, execute no console: document.getElementById('vsl-cta-container').classList.remove('hidden')");
+            console.log("⚡ FAILSAFE ABSOLUTO configurado: botão aparecerá AUTOMATICAMENTE em", DELAY_MINUTES, "minutos, mesmo que nada mais funcione");
+        })();
+    </script>
+
+    <!-- ========================================================================
+         FIREBASE & TRACKING INTEGRATION (NOVA VERSÃO)
+         ======================================================================== -->
+
+    <!-- Firebase SDK (Compat) -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+
+    <!-- Firebase Config (inicializa Firebase e cria window.db) -->
+    <script src="firebase-config.js"></script>
+
+    <!-- Sistema de Tracking (aguarda Firebase estar pronto) -->
+    <script src="tracking.js"></script>
+
+</body>
+
+</html>
