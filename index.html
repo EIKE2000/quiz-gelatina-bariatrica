@@ -1085,13 +1085,13 @@
                 setTimeout(() => nextStep(5), 4000); // Scanner
                 return;
             }
-            if (id === 8) {
-                showScreen(8);
+            if (id === 7) {
+                showScreen(7);
                 runTestimonials();
                 return;
             }
-            if (id === 13) {
-                showScreen(13);
+            if (id === 15) {
+                showScreen(15);
                 runAnalysis();
                 return;
             }
@@ -1206,7 +1206,7 @@
             });
 
             setTimeout(() => {
-                nextStep(15);
+                nextStep(16);
             }, 7000);
         }
 
@@ -1281,7 +1281,7 @@
                     }
 
                     // Prosseguir para próximo step
-                    nextStep(14);
+                    nextStep(15);
                 } else {
                     throw new Error('Erro ao salvar lead');
                 }
