@@ -927,35 +927,19 @@
             <!-- STEP 12 -->
             <div id="step-12" class="screen card hidden">
                 <h3 class="question-text">Análisis Metabólico</h3>
-                <p class="question-sub">Estos datos son necesarios para calcular tu Índice de Respuesta Metabólica
-                    (IRM) y enviarte tu plan personalizado.</p>
+                <p class="question-sub">Ingresa tus datos para recibir tu diagnóstico personalizado.</p>
                 <div style="text-align:left; margin-bottom:20px;">
-                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Nombre Completo *</label>
+                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Nombre *</label>
                     <input id="input-name" type="text"
                         style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
-                        placeholder="Ej: María González" required>
+                        placeholder="Ej: María" required autocomplete="given-name">
 
                     <label style="display:block; margin:20px 0 5px; font-weight:600;">Email *</label>
                     <input id="input-email" type="email"
                         style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
-                        placeholder="tu@email.com" required>
-
-                    <label style="display:block; margin:20px 0 5px; font-weight:600;">Peso (kg)</label>
-                    <input id="input-weight" type="number"
-                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
-                        placeholder="Ej: 70">
-
-                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Altura (cm)</label>
-                    <input id="input-height" type="number"
-                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
-                        placeholder="Ej: 165">
-
-                    <label style="display:block; margin:10px 0 5px; font-weight:600;">Edad</label>
-                    <input id="input-age" type="number"
-                        style="width:100%; padding:15px; border-radius:10px; border:1px solid #ddd; font-size:16px;"
-                        placeholder="Ej: 35">
+                        placeholder="tu@email.com" required autocomplete="email">
                 </div>
-                <button class="cta-btn-premium" onclick="submitFormAndProceed()">CALCULAR PERFIL</button>
+                <button class="cta-btn-premium" onclick="submitFormAndProceed()">🔥 GENERAR MI DIAGNÓSTICO</button>
                 <p id="form-error" style="color:#ef4444; margin-top:10px; display:none; font-size:14px;"></p>
             </div>
 
@@ -1203,7 +1187,6 @@
         async function submitFormAndProceed() {
             const nameInput = document.getElementById('input-name');
             const emailInput = document.getElementById('input-email');
-            const ageInput = document.getElementById('input-age');
             const errorEl = document.getElementById('form-error');
 
             // Validação
@@ -1235,18 +1218,17 @@
             // Desabilitar botão durante envio
             const submitBtn = event.target;
             submitBtn.disabled = true;
-            submitBtn.textContent = 'ENVIANDO...';
+            submitBtn.textContent = '⏳ ENVIANDO...';
 
             try {
                 // Obter session_id
                 const sessionId = localStorage.getItem('funnel_session_id');
 
-                // Preparar dados
+                // Preparar dados (apenas nome e email)
                 const leadData = {
                     session_id: sessionId,
                     name: nameInput.value.trim(),
-                    email: emailInput.value.trim().toLowerCase(),
-                    age: ageInput.value ? parseInt(ageInput.value) : null
+                    email: emailInput.value.trim().toLowerCase()
                 };
 
                 // Enviar para API
@@ -1260,6 +1242,15 @@
 
                 if (response.ok) {
                     console.log('✅ Lead salvo com sucesso');
+
+                    // Rastrear conversão no UTMify Pixel
+                    if (window.utmifyPixel) {
+                        window.utmifyPixel.track('Lead', {
+                            email: leadData.email,
+                            name: leadData.name
+                        });
+                    }
+
                     // Prosseguir para próximo step
                     nextStep(13);
                 } else {
@@ -1271,7 +1262,7 @@
                 errorEl.textContent = '⚠️ Error al enviar. Verifica tu conexión e intenta nuevamente.';
                 errorEl.style.display = 'block';
                 submitBtn.disabled = false;
-                submitBtn.textContent = 'CALCULAR PERFIL';
+                submitBtn.textContent = '🔥 GENERAR MI DIAGNÓSTICO';
             }
         }
 
