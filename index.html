@@ -949,18 +949,6 @@
                 </div>
             </div>
 
-            <!-- STEP 13 -->
-            <div id="step-13" class="screen card hidden">
-                <h3 class="question-text">Si pudieras comenzar a quemar grasa hoy, ¿darías el paso?</h3>
-                <p class="question-sub">Esta puede ser tu única oportunidad de acceder a la receta de Gelatina
-                    Bariátrica antes
-                    que los lugares para el test se agoten.</p>
-                <div class="options-grid">
-                    <button class="option-btn" onclick="nextStep(14)">Sí, con seguridad <span>➜</span></button>
-                    <button class="option-btn" onclick="nextStep(14)">Sí, estoy decidida <span>➜</span></button>
-                    <button class="option-btn" onclick="nextStep(14)">Sí, quiero ver diferencia <span>➜</span></button>
-                </div>
-            </div>
 
             <!-- STEP 11 - NOVA PERGUNTA: Maior Medo -->
             <div id="step-11" class="screen card hidden">
@@ -982,17 +970,17 @@
                 <h3 class="question-text">¿Ya compraste algún producto para adelgazar antes?</h3>
                 <p class="question-sub">Tu experiencia anterior nos ayuda a crear la mejor estrategia para ti</p>
                 <div class="options-grid">
-                    <button class="option-btn" onclick="nextStep(13)">Nunca compré nada <span>➜</span></button>
-                    <button class="option-btn" onclick="nextStep(13)">Sí, pero no funcionó <span>➜</span></button>
-                    <button class="option-btn" onclick="nextStep(13)">Sí, funcionó pero volví a engordar
+                    <button class="option-btn" onclick="nextStep(14)">Nunca compré nada <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(14)">Sí, pero no funcionó <span>➜</span></button>
+                    <button class="option-btn" onclick="nextStep(14)">Sí, funcionó pero volví a engordar
                         <span>➜</span></button>
-                    <button class="option-btn" onclick="nextStep(13)">Sí, estoy usando algo ahora
+                    <button class="option-btn" onclick="nextStep(14)">Sí, estoy usando algo ahora
                         <span>➜</span></button>
                 </div>
             </div>
 
-            <!-- STEP 13 - FORMULÁRIO -->
-            <div id="step-13" class="screen card hidden">
+            <!-- STEP 14 - FORMULÁRIO -->
+            <div id="step-14" class="screen card hidden">
                 <h3 class="question-text">Análisis Metabólico</h3>
                 <p class="question-sub">Ingresa tus datos para recibir tu diagnóstico personalizado.</p>
                 <div style="text-align:left; margin-bottom:20px;">
@@ -1010,9 +998,9 @@
                 <p id="form-error" style="color:#ef4444; margin-top:10px; display:none; font-size:14px;"></p>
             </div>
 
-            <!-- STEP 14 -->
-            <!-- STEP 14: LOADING ANALYSIS -->
-            <div id="step-14" class="screen card hidden">
+            <!-- STEP 15 -->
+            <!-- STEP 15: LOADING ANALYSIS -->
+            <div id="step-15" class="screen card hidden">
                 <div class="analysis-loader"></div>
                 <p id="analysis-status" class="analysis-text" style="font-weight:600; color:#555; text-align:center;">
                     Analizando tu metabolismo...</p>
@@ -1029,8 +1017,8 @@
                 </div>
             </div>
 
-            <!-- STEP 15: VSL PREMIUM REDESIGN -->
-            <div id="step-15" class="screen diag-modern-card hidden" style="max-width: 900px; padding: 0;">
+            <!-- STEP 16: VSL PREMIUM REDESIGN -->
+            <div id="step-16" class="screen diag-modern-card hidden" style="max-width: 900px; padding: 0;">
 
                 <!-- HEADER SECTION -->
                 <div
@@ -1215,8 +1203,8 @@
                 runTestimonials();
                 return;
             }
-            if (id === 14) {
-                showScreen(14);
+            if (id === 15) {
+                showScreen(15);
                 runAnalysis();
                 return;
             }
@@ -1331,7 +1319,7 @@
             });
 
             setTimeout(() => {
-                nextStep(15);
+                nextStep(16);
             }, 7000);
         }
 
@@ -1406,7 +1394,7 @@
                     }
 
                     // Prosseguir para próximo step
-                    nextStep(14);
+                    nextStep(15);
                 } else {
                     throw new Error('Erro ao salvar lead');
                 }
