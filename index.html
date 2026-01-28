@@ -1102,6 +1102,7 @@
                         </p>
                     </div>
 
+
                     <!-- VIDEO PLAYER -->
                     <div
                         style="border-radius: 20px; overflow: hidden; box-shadow: 0 15px 50px rgba(0,0,0,0.15); margin-bottom: 35px; position: relative;">
@@ -1110,14 +1111,18 @@
                             style="position: absolute; top: -20px; left: -20px; right: -20px; bottom: -20px; background: radial-gradient(circle at center, rgba(214, 51, 132, 0.15) 0%, transparent 70%); z-index: -1; border-radius: 30px;">
                         </div>
 
-                        <vturb-smartplayer id="vid-695eb72cda723d6f86838128"
-                            style="display: block; width: 100%;"></vturb-smartplayer>
-                        <script type="text/javascript">
-                            var s = document.createElement("script");
-                            s.src = "https://scripts.converteai.net/47c06bcf-e718-4c54-92a3-0d974afccfc6/players/695eb72cda723d6f86838128/v4/player.js";
-                            s.async = true;
-                            document.head.appendChild(s);
-                        </script>
+                        <!-- Wistia Player -->
+                        <script src="https://fast.wistia.com/player.js" async></script>
+                        <script src="https://fast.wistia.com/embed/nbmhjq4ydl.js" async type="module"></script>
+                        <style>
+                            wistia-player[media-id='nbmhjq4ydl']:not(:defined) {
+                                background: center / contain no-repeat url('https://fast.wistia.com/embed/medias/nbmhjq4ydl/swatch');
+                                display: block;
+                                filter: blur(5px);
+                                padding-top: 75.0%;
+                            }
+                        </style>
+                        <wistia-player media-id="nbmhjq4ydl" aspect="1.3333333333333333"></wistia-player>
                     </div>
 
                     <!-- CTA SECTION -->
@@ -1165,6 +1170,81 @@
 
         </div>
     </main>
+
+    <!-- WISTIA CTA CONTROL SCRIPT -->
+    <script>
+        (function () {
+            const CTA_CONTAINER_ID = 'vsl-cta-container';
+            const DELAY_MINUTES = 15;
+            const DELAY_SECONDS = DELAY_MINUTES * 60; // 900 segundos
+            const STORAGE_KEY = 'vsl_cta_shown';
+
+            console.log('🎬 Wistia CTA Control iniciado');
+            console.log(`⏱️ Delay configurado: ${DELAY_MINUTES} minutos (${DELAY_SECONDS} segundos)`);
+
+            function showCTA() {
+                const ctaContainer = document.getElementById(CTA_CONTAINER_ID);
+                if (ctaContainer && ctaContainer.classList.contains('hidden')) {
+                    ctaContainer.classList.remove('hidden');
+                    console.log('✅ CTA exibido!');
+                    try {
+                        localStorage.setItem(STORAGE_KEY, 'true');
+                    } catch (e) {
+                        console.error('Erro ao salvar no localStorage:', e);
+                    }
+                }
+            }
+
+            // 1. Verificar se já foi assistido antes
+            try {
+                if (localStorage.getItem(STORAGE_KEY) === 'true') {
+                    console.log('✅ Vídeo já assistido anteriormente - mostrando CTA');
+                    setTimeout(showCTA, 1000);
+                    return;
+                }
+            } catch (e) {
+                console.error('Erro ao verificar localStorage:', e);
+            }
+
+            // 2. Monitorar player Wistia
+            let ctaShown = false;
+
+            window._wq = window._wq || [];
+            _wq.push({
+                id: "nbmhjq4ydl",
+                onReady: function (video) {
+                    console.log('✅ Wistia player pronto');
+
+                    video.bind('timechange', function (t) {
+                        const currentTime = t;
+
+                        // Log a cada minuto
+                        if (Math.floor(currentTime) % 60 === 0 && Math.floor(currentTime) > 0) {
+                            console.log(`⏱️ Tempo: ${Math.floor(currentTime / 60)}min / ${DELAY_MINUTES}min`);
+                        }
+
+                        // Verificar se atingiu 15 minutos
+                        if (currentTime >= DELAY_SECONDS && !ctaShown) {
+                            console.log(`🎯 ${DELAY_MINUTES} MINUTOS ALCANÇADOS!`);
+                            showCTA();
+                            ctaShown = true;
+                        }
+                    });
+                }
+            });
+
+            // 3. Failsafe - Timer absoluto de 15 minutos
+            setTimeout(function () {
+                if (!ctaShown) {
+                    console.log('⚡ FAILSAFE: Forçando CTA após 15 minutos');
+                    showCTA();
+                    ctaShown = true;
+                }
+            }, DELAY_SECONDS * 1000);
+
+            console.log('💡 Sistema de CTA configurado com sucesso');
+        })();
+    </script>
 
     <script>
         let currentStep = 0;
